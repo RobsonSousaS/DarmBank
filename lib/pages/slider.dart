@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class SliderPage extends StatefulWidget {
@@ -14,8 +13,19 @@ class _SliderPageState extends State<SliderPage> {
     'assets/sprinkle.png',
   ];
 
+  final List<String> titles = [
+    'Economizar',
+    'Retire seu dinheiro',
+    'Invista seu dinheiro',
+  ];
+
+  final List<String> descriptions = [
+    'Ajudamos você a atingir sua meta de economia mensalmente e nossos planos de emergência permitem que você economize para várias finalidades',
+    'Com apenas o seu CPF, você pode retirar seus fundos a qualquer momento de qualquer agente do DarmBank perto de você.',
+    'Tenha acesso a investimentos sem risco que irão multiplicar sua renda e pagar altos retornos em poucos meses',
+  ];
+
   int currentIndex = 0;
-  final CarouselController _carouselController = CarouselController();
   final PageController _pageController = PageController();
 
   @override
@@ -23,77 +33,140 @@ class _SliderPageState extends State<SliderPage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 254, 254, 254),
       body: SafeArea(
-        child: Stack(
-          children: [
-            CarouselSlider(
-              carouselController: _carouselController,
-              options: CarouselOptions(
-                height: double.infinity,
-                viewportFraction: 1.0,
-                enableInfiniteScroll: true,
-                autoPlay: false,
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enlargeCenterPage: true,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (index, _) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-              ),
-              items: imageList.map((imageUrl) {
-                return Container(
-                  width: double.infinity,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+        child: Stack(children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: imageList.length,
+            onPageChanged: (index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              return Container(
+                width: double.infinity,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.center, // Alinhar ao centro
+                    children: [
+                      Image.asset(
+                        imageList[index],
+                        fit: index == 0 ? BoxFit.contain : BoxFit.cover,
+                        height: index == 0 ? 345.0 : null,
+                      ),
+                      SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment:
+                            MainAxisAlignment.start, // Alinhar ao centro
+                        children: [
+                          Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              '',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            titles[index],
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 6.0),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40.0),
+                          child: Text(
+                            descriptions[index],
+                            style: TextStyle(
+                              fontSize: 17.0,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              }).toList(),
-            ),
-            Positioned(
-              top: 16.0,
-              right: 16.0,
-              child: ElevatedButton(
-                onPressed: () {
+                ),
+              );
+            },
+          ),
+          Positioned(
+            top: 16.0,
+            right: 16.0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: InkWell(
+                onTap: () {
                   // Ação do botão "Skip"
                 },
-                child: Text('Skip'),
-              ),
-            ),
-            Positioned(
-              bottom: 16.0,
-              left: 16.0,
-              child: SmoothPageIndicator(
-                controller: _pageController,
-                count: imageList.length,
-                effect: ExpandingDotsEffect(
-                  dotColor: Colors.grey,
-                  activeDotColor: Colors.black,
-                  dotHeight: 8.0,
-                  dotWidth: 8.0,
-                  spacing: 8.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Pular',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 ),
               ),
             ),
-            Positioned(
-              right: 16.0,
-              bottom: 16.0,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    currentIndex = (currentIndex + 1) % imageList.length;
-                    _carouselController.nextPage();
-                  });
-                },
-                child: Text('Next'),
+          ),
+          Positioned(
+            bottom: 16.0,
+            left: 16.0,
+            child: SmoothPageIndicator(
+              controller: _pageController,
+              count: imageList.length,
+              effect: ExpandingDotsEffect(
+                dotHeight: 10.0,
+                dotWidth: 10.0,
+                activeDotColor: Colors.blue,
+                dotColor: Colors.grey,
               ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            right: 16.0,
+            bottom: 16.0,
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  currentIndex = (currentIndex + 1) % imageList.length;
+                  _pageController.animateToPage(
+                    currentIndex,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                });
+              },
+              child: Text('Próximo'),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                ),
+                textStyle: MaterialStateProperty.all<TextStyle>(
+                  TextStyle(fontSize: 18.0),
+                ),
+              ),
+            ),
+          ),
+        ]),
       ),
     );
   }
