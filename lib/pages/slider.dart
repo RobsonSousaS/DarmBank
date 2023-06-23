@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:bank_darm/pages/login_signup.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SliderPage extends StatefulWidget {
   @override
@@ -121,10 +122,12 @@ class _SliderPageState extends State<SliderPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Pular',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
+                    style: GoogleFonts.karla(
                       fontWeight: FontWeight.w300,
+                      fontSize: 18.0,
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -140,7 +143,7 @@ class _SliderPageState extends State<SliderPage> {
               effect: ExpandingDotsEffect(
                 dotHeight: 10.0,
                 dotWidth: 10.0,
-                activeDotColor: Colors.blue,
+                activeDotColor: Color(0xFF0066F6),
                 dotColor: Colors.grey,
               ),
             ),
@@ -157,12 +160,23 @@ class _SliderPageState extends State<SliderPage> {
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   );
+
+                  if (currentIndex == imageList.length - 3) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Loginsignuppage()),
+                    );
+                  }
                 });
               },
               child: Text('Próximo'),
               style: ButtonStyle(
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Color(0xFF0066F6),
                 ),
                 textStyle: MaterialStateProperty.all<TextStyle>(
                   TextStyle(fontSize: 18.0),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:bank_darm/pages/createacc.dart';
 
 class Loginsignuppage extends StatelessWidget {
   @override
@@ -22,15 +24,16 @@ class Loginsignuppage extends StatelessWidget {
                       children: [
                         Text(
                           'Bem vindo ao DarmBank',
-                          style: TextStyle(
-                            fontSize: 24.0,
+                          style: GoogleFonts.karla(
                             fontWeight: FontWeight.bold,
+                            fontSize: 24.0,
                           ),
                         ),
                         SizedBox(height: 8.0),
                         Text(
                           'O banco para todos',
-                          style: TextStyle(
+                          style: GoogleFonts.karla(
+                            fontWeight: FontWeight.w300,
                             fontSize: 16.0,
                           ),
                         ),
@@ -41,30 +44,47 @@ class Loginsignuppage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Ação do Botão 1
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateAccountPage()),
+                    );
                   },
-                  child: Text('CRIAR SUA CONTA GRATUITAMENTE'),
+                  child: Text(
+                    'CRIAR SUA CONTA GRATUITAMENTE',
+                    style: GoogleFonts.karla(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                    ),
+                  ),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       EdgeInsets.symmetric(horizontal: 60.0, vertical: 14.0),
                     ),
-                    textStyle: MaterialStateProperty.all<TextStyle>(
-                      TextStyle(fontSize: 14.0),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Color(0xFF0066F6),
                     ),
                   ),
                 ),
                 SizedBox(height: 10.0),
-                ElevatedButton(
-                  onPressed: () {
-                    // Ação do Botão 2
+                InkWell(
+                  onTap: () {
+                    
                   },
-                  child: Text('LOGAR EM SUA CONTA'),
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.symmetric(horizontal: 105.0, vertical: 14.0),
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 105.0, vertical: 14.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    textStyle: MaterialStateProperty.all<TextStyle>(
-                      TextStyle(fontSize: 14.0),
+                    child: Text(
+                      'LOGAR EM SUA CONTA',
+                      style: GoogleFonts.karla(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
