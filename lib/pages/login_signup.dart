@@ -22,6 +22,12 @@ class Loginsignuppage extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Image.asset(
+                          'assets/logo.png', // Substitua pelo caminho da sua imagem
+                          height: 410.0,
+                          width: 410.0,
+                        ),
+                        SizedBox(height: 8.0),
                         Text(
                           'Bem vindo ao DarmBank',
                           style: GoogleFonts.karla(
@@ -47,7 +53,8 @@ class Loginsignuppage extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CreateAccountPage()),
+                        builder: (context) => CreateAccountPage(),
+                      ),
                     );
                   },
                   child: Text(
@@ -68,12 +75,12 @@ class Loginsignuppage extends StatelessWidget {
                 ),
                 SizedBox(height: 10.0),
                 InkWell(
-                  onTap: () {
-                    
-                  },
+                  onTap: () {},
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 105.0, vertical: 14.0),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 105.0,
+                      vertical: 14.0,
+                    ),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(8.0),
