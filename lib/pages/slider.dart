@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:bank_darm/pages/login_signup.dart';
 
 class SliderPage extends StatefulWidget {
   @override
@@ -63,7 +64,7 @@ class _SliderPageState extends State<SliderPage> {
                             MainAxisAlignment.start, // Alinhar ao centro
                         children: [
                           Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
                             child: Text(
                               '',
                               style: TextStyle(
@@ -111,7 +112,10 @@ class _SliderPageState extends State<SliderPage> {
               ),
               child: InkWell(
                 onTap: () {
-                  // Ação do botão "Skip"
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => Loginsignuppage()),
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
