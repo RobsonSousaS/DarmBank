@@ -1,3 +1,4 @@
+import 'package:bank_darm/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bank_darm/pages/login_signup.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,17 +33,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.fromLTRB(
-                16.0, 0, 16.0, 0),
+            padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
             sliver: SliverList(
               delegate: SliverChildListDelegate(
                 [
                   Text(
                     'Crie sua conta',
                     style: GoogleFonts.karla(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30.0,
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30.0,
+                        color: Color.fromARGB(255, 0, 102, 246)),
                   ),
                   SizedBox(height: 10.0),
                   Text(
@@ -127,7 +127,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Loginpage(),
+                            ),
+                          );
                         },
                         child: Text(
                           'Faça login aqui',
@@ -186,6 +191,7 @@ class TitleTextFieldWidget extends StatelessWidget {
     );
   }
 }
+
 class RadioConta extends StatefulWidget {
   const RadioConta({Key? key}) : super(key: key);
 
@@ -225,11 +231,11 @@ class _RadioContaState extends State<RadioConta> {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.blue,
-                    width: 1.5,
+                    width: 2,
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: _selectedAccountType == 0
                       ? Container(
                           width: 10,
@@ -268,7 +274,7 @@ class _RadioContaState extends State<RadioConta> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: _selectedAccountType == 1
                       ? Container(
                           width: 10,

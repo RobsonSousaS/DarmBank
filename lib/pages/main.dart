@@ -1,7 +1,6 @@
 import 'package:bank_darm/pages/slider.dart';
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -22,18 +21,36 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
 
-    // Delay de 4 segundos para exibir a Splash Screen
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SliderPage()),
       );
     });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -41,7 +58,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Image.asset('assets/logo.png'),
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Image.asset('assets/logo.png'),
+          ),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bank_darm/pages/createacc.dart';
+import 'package:bank_darm/pages/login.dart';
 
 class Loginsignuppage extends StatelessWidget {
   @override
@@ -23,7 +24,7 @@ class Loginsignuppage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset(
-                          'assets/logo.png', // Substitua pelo caminho da sua imagem
+                          'assets/logo.png',
                           height: 410.0,
                           width: 410.0,
                         ),
@@ -75,7 +76,14 @@ class Loginsignuppage extends StatelessWidget {
                 ),
                 SizedBox(height: 10.0),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                     Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Loginpage(),
+                      ),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: 105.0,
