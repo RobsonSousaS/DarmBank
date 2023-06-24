@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:bank_darm/pages/login.dart';
-import 'package:bank_darm/pages/forgotpasscode.dart';
-
-class Forgotpasspage extends StatefulWidget {
-  const Forgotpasspage({super.key});
+import 'package:google_fonts/google_fonts.dart';
+class Recoverpage extends StatefulWidget {
+  const Recoverpage({super.key});
 
   @override
-  State<Forgotpasspage> createState() => _ForgotpasspageState();
+  State<Recoverpage> createState() => _RecoverpageState();
 }
 
-class _ForgotpasspageState extends State<Forgotpasspage> {
+class _RecoverpageState extends State<Recoverpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +38,7 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
               delegate: SliverChildListDelegate(
                 [
                   Text(
-                    'Esqueceu sua senha?',
+                    'Recuperar senha',
                     style: GoogleFonts.karla(
                         fontWeight: FontWeight.bold,
                         fontSize: 30.0,
@@ -48,7 +46,7 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    'Insira as informações abaixo para recuperar sua senha.',
+                    'Digite sua nova senha para continuar',
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.w400,
                       fontSize: 14.0,
@@ -56,35 +54,31 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                   ),
                   SizedBox(height: 50.0),
                   TitleTextFieldWidget(
-                    title: 'E-mail',
+                    title: 'Nova Senha',
                     controller: TextEditingController(),
                   ),
                   SizedBox(height: 10.0),
                   TitleTextFieldWidget(
-                    title: 'Nome Comleto',
-                    controller: TextEditingController(),
-                  ),
-                  SizedBox(height: 10.0),
-                  TitleTextFieldWidget(
-                    title: 'CPF',
+                    title: 'Repita a Senha',
                     controller: TextEditingController(),
                   ),
                   SizedBox(
-                    height: 190.0,
+                    height: 300.0,
                   ),
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ForgotPasscodePage(),
-                          ),
-                        );
+                         Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Loginpage(),
+                  ),
+                );
+
                       },
                       child: Center(
                         child: Text(
-                          'RECUPERE SUA SENHA',
+                          'MUDAR SENHA',
                           style: GoogleFonts.karla(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,
