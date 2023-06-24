@@ -1,17 +1,15 @@
-import 'package:bank_darm/pages/createacc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:bank_darm/pages/login_signup.dart';
-import 'package:bank_darm/pages/fogotpass.dart';
+import 'package:bank_darm/pages/login.dart';
 
-class Loginpage extends StatefulWidget {
-  const Loginpage({super.key});
+class Forgotpasspage extends StatefulWidget {
+  const Forgotpasspage({super.key});
 
   @override
-  State<Loginpage> createState() => _LoginpageState();
+  State<Forgotpasspage> createState() => _ForgotpasspageState();
 }
 
-class _LoginpageState extends State<Loginpage> {
+class _ForgotpasspageState extends State<Forgotpasspage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +27,7 @@ class _LoginpageState extends State<Loginpage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Loginsignuppage(),
+                    builder: (context) => Loginpage(),
                   ),
                 );
               },
@@ -41,82 +39,45 @@ class _LoginpageState extends State<Loginpage> {
               delegate: SliverChildListDelegate(
                 [
                   Text(
-                    'Entre na sua',
+                    'Esqueceu sua senha?',
                     style: GoogleFonts.karla(
                         fontWeight: FontWeight.bold,
                         fontSize: 30.0,
                         color: Color.fromARGB(255, 0, 102, 246)),
                   ),
-                  Text(
-                    'conta',
-                    style: GoogleFonts.karla(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                        color: Color.fromARGB(255, 0, 102, 246)),
-                  ),
+
                   SizedBox(height: 10.0),
                   Text(
-                    'Faça login na sua conta DarmBank',
+                    'Informe seu CPF para recuperar sua senha.',
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.w400,
                       fontSize: 14.0,
                     ),
                   ),
-                  SizedBox(height: 60.0),
+                  SizedBox(height: 50.0),
+                  TitleTextFieldWidget(
+                    title: 'E-mail',
+                    controller: TextEditingController(),
+                  ),
+                  SizedBox(height: 10.0),
+                  TitleTextFieldWidget(
+                    title: 'Nome Comleto',
+                    controller: TextEditingController(),
+                  ),
+                  SizedBox(height: 10.0),
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: TextEditingController(),
                   ),
-                  TitleTextFieldWidget(
-                    title: 'Senha',
-                    controller: TextEditingController(),
-                  ),
                   SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Esqueceu sua senha?,',
-                        style: GoogleFonts.karla(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Forgotpasspage(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'clique aqui para recuperá-la',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13.0,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 170,
+                    height: 190.0,
                   ),
                   Container(
                     child: ElevatedButton(
                       onPressed: () {},
                       child: Center(
                         child: Text(
-                          'LOGAR',
+                          'RECUPERE SUA SENHA',
                           style: GoogleFonts.karla(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,
@@ -133,36 +94,6 @@ class _LoginpageState extends State<Loginpage> {
                         ),
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Você não tem uma conta no DarmBank?',
-                        style: GoogleFonts.karla(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateAccountPage(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Se cadastre aqui',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13.0,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
@@ -195,7 +126,7 @@ class TitleTextFieldWidget extends StatelessWidget {
             fontSize: 12.0,
           ),
         ),
-        SizedBox(height: 5.0),
+        SizedBox(height: 15.0),
         TextField(
           controller: controller,
           decoration: InputDecoration(
