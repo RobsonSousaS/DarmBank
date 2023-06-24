@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bank_darm/pages/login.dart';
 import 'package:bank_darm/pages/forgotpasscode.dart';
+import 'package:bank_darm/pages/widgetspaget.dart';
 
 class Forgotpasspage extends StatefulWidget {
   const Forgotpasspage({super.key});
@@ -70,7 +71,7 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                     controller: TextEditingController(),
                   ),
                   SizedBox(
-                    height: 190.0,
+                    height: 260.0,
                   ),
                   Container(
                     child: ElevatedButton(
@@ -108,43 +109,6 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class TitleTextFieldWidget extends StatelessWidget {
-  final String title;
-  final TextEditingController controller;
-
-  TitleTextFieldWidget({required this.title, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 15,
-        ),
-        Text(
-          title,
-          style: GoogleFonts.karla(
-            fontWeight: FontWeight.bold,
-            fontSize: 12.0,
-          ),
-        ),
-        SizedBox(height: 15.0),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          ),
-        )
-      ],
     );
   }
 }

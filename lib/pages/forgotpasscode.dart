@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bank_darm/pages/login.dart';
 import 'package:bank_darm/pages/recoverpass.dart';
+import 'package:bank_darm/pages/widgetspaget.dart';
 
 class ForgotPasscodePage extends StatefulWidget {
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bank_darm/pages/login.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bank_darm/pages/widgetspaget.dart';
 class Recoverpage extends StatefulWidget {
   const Recoverpage({super.key});
 
@@ -63,7 +64,7 @@ class _RecoverpageState extends State<Recoverpage> {
                     controller: TextEditingController(),
                   ),
                   SizedBox(
-                    height: 300.0,
+                    height: 350.0,
                   ),
                   Container(
                     child: ElevatedButton(
@@ -74,7 +75,6 @@ class _RecoverpageState extends State<Recoverpage> {
                     builder: (context) => Loginpage(),
                   ),
                 );
-
                       },
                       child: Center(
                         child: Text(
@@ -102,43 +102,6 @@ class _RecoverpageState extends State<Recoverpage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class TitleTextFieldWidget extends StatelessWidget {
-  final String title;
-  final TextEditingController controller;
-
-  TitleTextFieldWidget({required this.title, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 15,
-        ),
-        Text(
-          title,
-          style: GoogleFonts.karla(
-            fontWeight: FontWeight.bold,
-            fontSize: 12.0,
-          ),
-        ),
-        SizedBox(height: 15.0),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          ),
-        )
-      ],
     );
   }
 }

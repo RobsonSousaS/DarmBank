@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bank_darm/pages/login_signup.dart';
 import 'package:bank_darm/pages/fogotpass.dart';
+import 'package:bank_darm/pages/widgetspaget.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -170,43 +171,6 @@ class _LoginpageState extends State<Loginpage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class TitleTextFieldWidget extends StatelessWidget {
-  final String title;
-  final TextEditingController controller;
-
-  TitleTextFieldWidget({required this.title, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 15,
-        ),
-        Text(
-          title,
-          style: GoogleFonts.karla(
-            fontWeight: FontWeight.bold,
-            fontSize: 12.0,
-          ),
-        ),
-        SizedBox(height: 5.0),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          ),
-        )
-      ],
     );
   }
 }
