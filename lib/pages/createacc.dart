@@ -8,6 +8,7 @@ class CreateAccountPage extends StatefulWidget {
   @override
   _CreateAccountPageState createState() => _CreateAccountPageState();
 }
+
 class _CreateAccountPageState extends State<CreateAccountPage> {
   @override
   Widget build(BuildContext context) {
@@ -55,36 +56,40 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   SizedBox(height: 5.0),
                   TitleTextFieldWidget(
-                    title: 'Nome completo',
-                    controller: TextEditingController(),
-                  ),
+                      title: 'Nome completo',
+                      controller: TextEditingController(),
+                      width: 400, obscureText: false,),
                   TitleTextFieldWidget(
-                    title: 'E-mail',
-                    controller: TextEditingController(),
-                  ),
+                      title: 'E-mail',
+                      controller: TextEditingController(),
+                      width: 400,obscureText: false,),
                   TitleTextFieldWidget(
-                    title: 'CPF',
-                    controller: TextEditingController(),
-                  ),
+                      title: 'CPF',
+                      controller: TextEditingController(),
+                      width: 400,obscureText: false,),
                   TitleTextFieldWidget(
-                    title: 'Telefone',
-                    controller: TextEditingController(),
-                  ),
+                      title: 'Telefone',
+                      controller: TextEditingController(),
+                      width: 400,obscureText: false,),
+                  Row(
+                    children: [
                       TitleTextFieldWidget(
-                        title: 'Endereço',
-                        controller: TextEditingController(),
-                      ),
-                      SizedBox(height: 5),
-                      DropWidget(),
+                          title: 'Endereço',
+                          controller: TextEditingController(),
+                          width: 250,obscureText: false,),
+                          SizedBox(width: 10,),
+                      DropWidget()
+                    ],
+                  ),
                   RadioConta(),
                   TitleTextFieldWidget(
-                    title: 'Senha',
-                    controller: TextEditingController(),
-                  ),
+                      title: 'Senha',
+                      controller: TextEditingController(),
+                      width: 400,obscureText: true,),
                   TitleTextFieldWidget(
-                    title: 'Confirmar senha',
-                    controller: TextEditingController(),
-                  ),
+                      title: 'Confirmar senha',
+                      controller: TextEditingController(),
+                      width: 400,obscureText: true,),
                   SizedBox(
                     height: 9,
                   ),

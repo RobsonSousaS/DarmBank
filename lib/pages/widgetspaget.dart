@@ -5,14 +5,21 @@ import 'package:google_fonts/google_fonts.dart';
 class TitleTextFieldWidget extends StatelessWidget {
   final String title;
   final TextEditingController controller;
+  final double width;
+  final bool obscureText;
 
-  TitleTextFieldWidget({required this.title, required this.controller,});
-
+  TitleTextFieldWidget({
+    required this.title,
+    required this.controller,
+    required this.width,
+    required this.obscureText,
+  });
   @override
   Widget build(BuildContext context) {
     EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0);
-
     
+    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,13 +34,17 @@ class TitleTextFieldWidget extends StatelessWidget {
           ),
         ),
         SizedBox(height: 5.0),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
+        Container(
+          width: width,
+          child: TextField(
+            controller: controller,
+            obscureText: obscureText,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              contentPadding: contentPadding,
             ),
-            contentPadding: contentPadding,
           ),
         )
       ],
@@ -131,7 +142,6 @@ class DropWidget extends StatefulWidget {
   @override
   State<DropWidget> createState() => _DropWidgetState();
 }
-
 class _DropWidgetState extends State<DropWidget> {
   String estadoSelecionado = 'AC';
   List<String> estados = [
@@ -141,22 +151,23 @@ class _DropWidgetState extends State<DropWidget> {
 
   @override
   Widget build(BuildContext context) {
+EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(width: 8),
+        SizedBox(height: 7,),
         Text(
           'Estado',
           style: GoogleFonts.karla(
             fontWeight: FontWeight.bold,
-            fontSize: 13.0,
-            color: Colors.black,
+            fontSize: 12.0,
           ),
         ),
-        SizedBox(height: 5),
-        SizedBox(
-          width: double.infinity,
-          height: 53.0,
+        SizedBox(height: 6),
+        Container(
+          width: 100,
+          height: 50,
           child: DropdownButtonFormField<String>(
             value: estadoSelecionado,
             onChanged: (String? newValue) {
@@ -165,12 +176,12 @@ class _DropWidgetState extends State<DropWidget> {
               });
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0),),contentPadding: contentPadding, 
             ),
             items: estados.map((String estado) {
               return DropdownMenuItem<String>(
                 value: estado,
-                child: Text(estado, style: TextStyle(fontSize: 12.0),),
+                child: Text(estado, style: TextStyle(fontSize: 12.0)),
               );
             }).toList(),
           ),

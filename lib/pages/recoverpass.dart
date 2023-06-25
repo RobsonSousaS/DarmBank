@@ -57,11 +57,13 @@ class _RecoverpageState extends State<Recoverpage> {
                   TitleTextFieldWidget(
                     title: 'Nova Senha',
                     controller: TextEditingController(),
+                    width: 400, obscureText: true,
                   ),
                   SizedBox(height: 10.0),
                   TitleTextFieldWidget(
                     title: 'Repita a Senha',
                     controller: TextEditingController(),
+                    width: 400, obscureText: true,
                   ),
                   SizedBox(
                     height: 350.0,

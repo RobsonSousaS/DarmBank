@@ -67,10 +67,12 @@ class _LoginpageState extends State<Loginpage> {
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: TextEditingController(),
+                    width: 400, obscureText: false,
                   ),
                   TitleTextFieldWidget(
                     title: 'Senha',
                     controller: TextEditingController(),
+                    width: 400, obscureText: true,
                   ),
                   SizedBox(
                     height: 10,
