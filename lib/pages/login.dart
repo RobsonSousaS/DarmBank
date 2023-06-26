@@ -1,3 +1,4 @@
+import 'package:bank_darm/pages/createcard.dart';
 import 'package:bank_darm/pages/imports.dart';
 
 class Loginpage extends StatefulWidget {
@@ -111,7 +112,14 @@ class _LoginpageState extends State<Loginpage> {
                   ),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreatecardPage(),
+                            ),
+                          );
+                      },
                       child: Center(
                         child: Text(
                           'LOGAR',

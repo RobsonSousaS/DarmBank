@@ -9,3 +9,4 @@ export 'package:bank_darm/pages/login_signup.dart';
 export 'package:google_fonts/google_fonts.dart';
 export 'package:bank_darm/pages/createacc.dart';
 export 'package:bank_darm/pages/forgotpass.dart';
+export 'package:bank_darm/pages/createcard.dart';

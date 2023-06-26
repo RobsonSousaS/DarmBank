@@ -1,22 +1,24 @@
 import 'package:bank_darm/pages/imports.dart';
 
+
 class TitleTextFieldWidget extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final double width;
   final bool obscureText;
+  final TextInputType? keyboardType;
 
   TitleTextFieldWidget({
     required this.title,
     required this.controller,
     required this.width,
     required this.obscureText,
+    this.keyboardType,
   });
   @override
   Widget build(BuildContext context) {
-    EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0);
-    
-    
+    EdgeInsets contentPadding =
+        EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,6 +39,7 @@ class TitleTextFieldWidget extends StatelessWidget {
           child: TextField(
             controller: controller,
             obscureText: obscureText,
+            keyboardType: keyboardType,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
@@ -56,6 +59,7 @@ class RadioConta extends StatefulWidget {
   @override
   _RadioContaState createState() => _RadioContaState();
 }
+
 class _RadioContaState extends State<RadioConta> {
   int _selectedAccountType = 0;
 
@@ -132,29 +136,56 @@ class _RadioContaState extends State<RadioConta> {
   }
 }
 
-
-
 class DropWidget extends StatefulWidget {
   const DropWidget({Key? key});
 
   @override
   State<DropWidget> createState() => _DropWidgetState();
 }
+
 class _DropWidgetState extends State<DropWidget> {
   String estadoSelecionado = 'AC';
   List<String> estados = [
-    'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT',
-    'MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'
+    'AC',
+    'AL',
+    'AP',
+    'AM',
+    'BA',
+    'CE',
+    'DF',
+    'ES',
+    'GO',
+    'MA',
+    'MT',
+    'MS',
+    'MG',
+    'PA',
+    'PB',
+    'PR',
+    'PE',
+    'PI',
+    'RJ',
+    'RN',
+    'RS',
+    'RO',
+    'RR',
+    'SC',
+    'SP',
+    'SE',
+    'TO'
   ];
 
   @override
   Widget build(BuildContext context) {
-EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
+    EdgeInsets contentPadding =
+        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 7,),
+        SizedBox(
+          height: 7,
+        ),
         Text(
           'Estado',
           style: GoogleFonts.karla(
@@ -174,7 +205,10 @@ EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0
               });
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0),),contentPadding: contentPadding, 
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              contentPadding: contentPadding,
             ),
             items: estados.map((String estado) {
               return DropdownMenuItem<String>(
@@ -188,7 +222,6 @@ EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0
     );
   }
 }
-
 
 class PasscodeDigitTextField extends StatefulWidget {
   final FocusNode focusNode;
@@ -232,6 +265,223 @@ class _PasscodeDigitTextFieldState extends State<PasscodeDigitTextField> {
             FocusScope.of(context).requestFocus(widget.nextFocusNode);
           }
         },
+      ),
+    );
+  }
+}
+
+class RadioButtonsWidget extends StatefulWidget {
+  @override
+  _RadioButtonsWidgetState createState() => _RadioButtonsWidgetState();
+}
+
+class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
+  int selectedPair = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Radio<int>(
+                value: 0,
+                groupValue: selectedPair,
+                onChanged: (value) {
+                  setState(() {
+                    selectedPair = value!;
+                  });
+                },
+              ),
+              Text(
+                'Débito',
+                style: GoogleFonts.karla(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.0,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Radio<int>(
+                value: 1,
+                groupValue: selectedPair,
+                onChanged: (value) {
+                  setState(() {
+                    selectedPair = value!;
+                  });
+                },
+              ),
+              Text(
+                'Crédito',
+                style: GoogleFonts.karla(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.0,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Radio<int>(
+                value: 2,
+                groupValue: selectedPair,
+                onChanged: (value) {
+                  setState(() {
+                    selectedPair = value!;
+                  });
+                },
+              ),
+              Text(
+                'Poupança',
+                style: GoogleFonts.karla(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Você também tem opção de selecionar cartões multifuncionais',
+            style: GoogleFonts.karla(
+              fontWeight: FontWeight.w400,
+              fontSize: 14.0,
+            ),
+          ),
+          SizedBox(height: 10.0),
+          Row(
+            children: [
+              Radio<int>(
+                value: 3,
+                groupValue: selectedPair,
+                onChanged: (value) {
+                  setState(() {
+                    selectedPair = value!;
+                  });
+                },
+              ),
+              Text(
+                'Crédito e Débito',
+                style: GoogleFonts.karla(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.0,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Radio<int>(
+                value: 4,
+                groupValue: selectedPair,
+                onChanged: (value) {
+                  setState(() {
+                    selectedPair = value!;
+                  });
+                },
+              ),
+              Text(
+                'Poupança e Débito',
+                style: GoogleFonts.karla(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.0,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+class CardWidget extends StatelessWidget {
+  final String cardNumber;
+  final String cardHolderName;
+  final String expiryDate;
+  final String cardType;
+  final String cvc;
+
+  CardWidget({
+    required this.cardNumber,
+    required this.cardHolderName,
+    required this.expiryDate,
+    required this.cardType,
+    required this.cvc,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: 300,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.blue,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              cardType,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              cardNumber,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 8),
+            child: Text(
+              cardHolderName,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Text(
+                  expiryDate,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+            padding: EdgeInsets.only(left: 250),
+            child: Text(
+              cvc,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+            ],
+          ),
+        ],
       ),
     );
   }

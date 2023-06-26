@@ -1,3 +1,4 @@
+import 'package:bank_darm/pages/createcard.dart';
 import 'package:bank_darm/pages/imports.dart';
 class CreateAccountPage extends StatefulWidget {
   @override
@@ -86,17 +87,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       controller: TextEditingController(),
                       width: 400,obscureText: true,),
                   SizedBox(
-                    height: 9,
+                    height: 5,
                   ),
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CreateAccountPage(),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreatecardPage(),
+                            ),
+                          );
                       },
                       child: Center(
                         child: Text(
