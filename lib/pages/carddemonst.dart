@@ -34,7 +34,7 @@ class _CarddemonstPageState extends State<CarddemonstPage> {
                     cardNumber: '1234 5678 9012 3456',
                     cardHolderName: 'JOHN DOE',
                     expiryDate: '12/24',
-                    cardType: 'Cartão de XXX',
+                    cardType: 'Cartão de XXXX',
                     cvc: '123',
                   ),
                   SizedBox(height: 30.0),
@@ -55,18 +55,13 @@ class _CarddemonstPageState extends State<CarddemonstPage> {
                   Row(
                     children: [
                       TitleTextFieldWidget(
-                        title: 'Data de validade',
+                        title: 'CVC',
                         controller: TextEditingController(),
                         width: 160,  obscureText: false,
                         keyboardType: TextInputType.number,
                       ),
                       SizedBox(width: 40,),
-                      TitleTextFieldWidget(
-                    title: 'CVC',
-                    controller: TextEditingController(),
-                    width: 160,  obscureText: false,
-                    keyboardType: TextInputType.number,
-                  ),
+                      DropAnos(),
                     ],
                   ),
                   TitleTextFieldWidget(
@@ -78,7 +73,13 @@ class _CarddemonstPageState extends State<CarddemonstPage> {
                   SizedBox(height: 80.0),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CardPage(),
+                          ),
+                        );
+                      },
                       child: Center(
                         child: Text(
                           'SOLICITAR CARTÃO',

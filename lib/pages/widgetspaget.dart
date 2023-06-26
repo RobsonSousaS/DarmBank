@@ -447,6 +447,7 @@ class CardWidget extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 10,),
           Padding(
             padding: EdgeInsets.only(left: 8),
             child: Text(
@@ -483,6 +484,131 @@ class CardWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+class DropAnos extends StatefulWidget {
+  const DropAnos({Key? key});
+
+  @override
+  State<DropAnos> createState() => _DropAnosState();
+}
+
+class _DropAnosState extends State<DropAnos> {
+  String anoSelecionado = '2 Anos';
+  List<String> ano = [
+    '2 Anos',
+    '4 Anos',
+    '5 Anos',
+    '6 Anos',
+    ];
+
+  @override
+  Widget build(BuildContext context) {
+    EdgeInsets contentPadding =
+        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 7,
+        ),
+        Text(
+          'Data de Validade',
+          style: GoogleFonts.karla(
+            fontWeight: FontWeight.bold,
+            fontSize: 12.0,
+          ),
+        ),
+        SizedBox(height: 6),
+        Container(
+          width: 160,
+          height: 50,
+          child: DropdownButtonFormField<String>(
+            value: anoSelecionado,
+            onChanged: (String? newValue) {
+              setState(() {
+                anoSelecionado = newValue!;
+              });
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              contentPadding: contentPadding,
+            ),
+            items: ano.map((String ano) {
+              return DropdownMenuItem<String>(
+                value: ano,
+                child: Text(ano, style: TextStyle(fontSize: 12.0)),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DropCardtype extends StatefulWidget {
+  const DropCardtype({Key? key});
+
+  @override
+  State<DropCardtype> createState() => _DropCardtypeState();
+}
+
+class _DropCardtypeState extends State<DropCardtype> {
+  String cardSelecionado = 'Visa';
+  List<String> card = [
+    'Visa', 'MasterCard', 'Elo', 'Hibercard', 'American Express'];
+
+  @override
+  Widget build(BuildContext context) {
+    EdgeInsets contentPadding =
+        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 7,
+        ),
+        Text(
+          'Data de Validade',
+          style: GoogleFonts.karla(
+            fontWeight: FontWeight.bold,
+            fontSize: 12.0,
+          ),
+        ),
+        SizedBox(height: 6),
+        Container(
+          width: 160,
+          height: 50,
+          child: DropdownButtonFormField<String>(
+            value: cardSelecionado,
+            onChanged: (String? newValue) {
+              setState(() {
+                cardSelecionado = newValue!;
+              });
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              contentPadding: contentPadding,
+            ),
+            items: card.map((String card) {
+              return DropdownMenuItem<String>(
+                value: card,
+                child: Text(card, style: TextStyle(fontSize: 12.0)),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 }
