@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:bank_darm/pages/login_signup.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:bank_darm/pages/widgetspaget.dart';
-
+import 'package:bank_darm/pages/imports.dart';
 class SliderPage extends StatefulWidget {
   @override
   _SliderPageState createState() => _SliderPageState();

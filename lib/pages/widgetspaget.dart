@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:bank_darm/pages/imports.dart';
 
 class TitleTextFieldWidget extends StatelessWidget {
   final String title;
@@ -187,6 +185,54 @@ EdgeInsets contentPadding = EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0
           ),
         ),
       ],
+    );
+  }
+}
+
+
+class PasscodeDigitTextField extends StatefulWidget {
+  final FocusNode focusNode;
+  final TextEditingController controller;
+  final FocusNode? nextFocusNode;
+
+  const PasscodeDigitTextField({
+    required this.focusNode,
+    required this.controller,
+    this.nextFocusNode,
+  });
+
+  @override
+  _PasscodeDigitTextFieldState createState() => _PasscodeDigitTextFieldState();
+}
+
+class _PasscodeDigitTextFieldState extends State<PasscodeDigitTextField> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60.0,
+      height: 60.0,
+      child: TextField(
+        focusNode: widget.focusNode,
+        controller: widget.controller,
+        keyboardType: TextInputType.number,
+        maxLength: 1,
+        obscureText: true,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 24.0,
+          fontWeight: FontWeight.bold,
+        ),
+        decoration: InputDecoration(
+          counterText: '',
+          border: OutlineInputBorder(),
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty && widget.nextFocusNode != null) {
+            widget.focusNode.unfocus();
+            FocusScope.of(context).requestFocus(widget.nextFocusNode);
+          }
+        },
+      ),
     );
   }
 }

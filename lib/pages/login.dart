@@ -1,9 +1,4 @@
-import 'package:bank_darm/pages/createacc.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:bank_darm/pages/login_signup.dart';
-import 'package:bank_darm/pages/fogotpass.dart';
-import 'package:bank_darm/pages/widgetspaget.dart';
+import 'package:bank_darm/pages/imports.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});

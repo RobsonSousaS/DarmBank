@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:bank_darm/pages/createacc.dart';
-import 'package:bank_darm/pages/login.dart';
-import 'package:bank_darm/pages/widgetspaget.dart';
+import 'package:bank_darm/pages/imports.dart';
 
 class Loginsignuppage extends StatelessWidget {
   @override

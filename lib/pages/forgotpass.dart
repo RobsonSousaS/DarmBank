@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:bank_darm/pages/login.dart';
-import 'package:bank_darm/pages/forgotpasscode.dart';
-import 'package:bank_darm/pages/widgetspaget.dart';
-
+import 'package:bank_darm/pages/imports.dart';
 class Forgotpasspage extends StatefulWidget {
   const Forgotpasspage({super.key});
 
