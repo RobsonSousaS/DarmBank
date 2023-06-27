@@ -1,4 +1,5 @@
 import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/pages/usercli.dart';
 
 class CardPage extends StatefulWidget {
   @override
@@ -20,50 +21,62 @@ class _CardPageState extends State<CardPage> {
             color: Colors.white,
           ),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
-        itemCount: 3,
+        itemCount: 6,
         itemBuilder: (context, index) {
           return CardsWidget();
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.credit_card),
-            label: 'Cartões',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Usuário',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-class CardsWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: ListTile(
-        leading: Icon(Icons.credit_card),
-        title: Text('Cartão de Crédito'),
-        subtitle: Text('**** **** **** 1234'),
-        trailing: IconButton(
-          icon: Icon(Icons.arrow_forward),
-          onPressed: () {},
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(Icons.credit_card),
+              onPressed: () {
+                setState(() {
+                  _currentIndex = 1;
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.person),
+              onPressed: () {
+                setState(() {
+                  _currentIndex = 0;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserPage()),
+                  );
+                });
+              },
+            ),
+          ],
         ),
       ),
+      floatingActionButton: Theme(
+        data: ThemeData(
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Colors.white,
+          ),
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreatenewcardPage(),
+                          ),
+                        );
+          },
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.add),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

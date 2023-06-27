@@ -11,3 +11,5 @@ export 'package:bank_darm/pages/createacc.dart';
 export 'package:bank_darm/pages/forgotpass.dart';
 export 'package:bank_darm/pages/createcard.dart';
 export 'package:bank_darm/pages/listcards.dart';
+export 'package:bank_darm/pages/usercli.dart';
+export 'package:bank_darm/pages/createnewcard.dart';

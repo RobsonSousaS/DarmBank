@@ -612,3 +612,22 @@ class _DropCardtypeState extends State<DropCardtype> {
     );
   }
 }
+
+
+class CardsWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(16.0),
+      child: ListTile(
+        leading: Icon(Icons.credit_card),
+        title: Text('Cartão de Crédito'),
+        subtitle: Text('**** **** **** 1234'),
+        trailing: IconButton(
+          icon: Icon(Icons.arrow_forward),
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+}
