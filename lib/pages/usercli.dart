@@ -12,8 +12,8 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text(
-          'Usuario',
+        title: Text(
+          'Usuário',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
@@ -24,12 +24,34 @@ class _UserPageState extends State<UserPage> {
       ),
       body: Column(
         children: [
-          ListTile(
-            leading: Icon(Icons.photo),
-            title: Text('Adicionar Foto'),
+          GestureDetector(
             onTap: () {
-              // Lógica para adicionar foto
+              // Lógica para adicionar foto do usuário
             },
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              child: Center(
+                child: CircleAvatar(
+                  radius: 80,
+                  backgroundColor: Colors.grey[600],
+                  child: Icon(
+                    Icons.photo,
+                    size: 80,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: ElevatedButton(
+              onPressed: () {
+                // Lógica para mudar o avatar
+              },
+              child: Text('Mudar Avatar'),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.lock),
@@ -43,6 +65,16 @@ class _UserPageState extends State<UserPage> {
             title: Text('Apagar Conta'),
             onTap: () {
               // Lógica para apagar conta
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Sair Conta'),
+            onTap: () {
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Loginsignuppage()),
+                  );
             },
           ),
         ],

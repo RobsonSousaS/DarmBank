@@ -24,7 +24,7 @@ class _CreatenewcardPageState extends State<CreatenewcardPage> {
               delegate: SliverChildListDelegate(
                 [
                   Text(
-                    'Deseja criar um novo cartão?',
+                    'Deseja cadastrar um novo cartão?',
                     style: GoogleFonts.karla(
                         fontWeight: FontWeight.bold,
                         fontSize: 30.0,
@@ -32,7 +32,7 @@ class _CreatenewcardPageState extends State<CreatenewcardPage> {
                   ),
                   SizedBox(height: 20.0),
                   Text(
-                    'Selecione o tipo de cartão que deseja criar.',
+                    'Selecione o tipo de cartão que deseja cadastrar.',
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.w400,
                       fontSize: 14.0,
@@ -53,7 +53,7 @@ class _CreatenewcardPageState extends State<CreatenewcardPage> {
                       },
                       child: Center(
                         child: Text(
-                          'CRIAR NOVO CARTÃO',
+                          'CADASTRAR NOVO CARTÃO',
                           style: GoogleFonts.karla(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,

@@ -625,9 +625,66 @@ class CardsWidget extends StatelessWidget {
         subtitle: Text('**** **** **** 1234'),
         trailing: IconButton(
           icon: Icon(Icons.arrow_forward),
-          onPressed: () {},
+          onPressed: () {
+                 Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CardDetailsPage(),
+                  ),
+                );
+          },
         ),
       ),
     );
   }
+}
+
+class CardStatus extends StatelessWidget {
+  const CardStatus({required this.status});
+
+  final int status;
+
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (status == 1)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.green),
+                    SizedBox(width: 8),
+                    Text('Aprovado', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+            if (status == 2)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.watch_later, color: Colors.orange),
+                    SizedBox(width: 8),
+                    Text('Esperando avaliação', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+            if (status == 3)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.cancel, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Reprovado', style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+              ]
+              );
+              }
 }
