@@ -1,9 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bank_darm">
+    package="com.example.bank_darm"
+    xmlns:tools="http://schemas.android.com/tools">
    <application
         android:label="DarmBank"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        tools:overrideLibrary="com.google.firebase.analytics.ktx">
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -63,8 +63,13 @@ class _LoginpageState extends State<Loginpage> {
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: TextEditingController(),
-                    width: 400, obscureText: false,
-                  ),
+                    width: 400,
+                    obscureText: false,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],),
                   TitleTextFieldWidget(
                     title: 'Senha',
                     controller: TextEditingController(),

@@ -18,13 +18,13 @@ class _CardPageState extends State<CardPage> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0,
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
         ),
         automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
-        itemCount: 6,
+        itemCount: 1,
         itemBuilder: (context, index) {
           return CardsWidget();
         },

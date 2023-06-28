@@ -26,7 +26,6 @@ class _UserPageState extends State<UserPage> {
         children: [
           GestureDetector(
             onTap: () {
-              // Lógica para adicionar foto do usuário
             },
             child: Container(
               height: 200,
@@ -48,7 +47,7 @@ class _UserPageState extends State<UserPage> {
             margin: EdgeInsets.symmetric(vertical: 10),
             child: ElevatedButton(
               onPressed: () {
-                // Lógica para mudar o avatar
+          
               },
               child: Text('Mudar Avatar'),
             ),
@@ -57,14 +56,14 @@ class _UserPageState extends State<UserPage> {
             leading: Icon(Icons.lock),
             title: Text('Alterar Senha'),
             onTap: () {
-              // Lógica para alterar senha
+              
             },
           ),
           ListTile(
             leading: Icon(Icons.delete),
             title: Text('Apagar Conta'),
             onTap: () {
-              // Lógica para apagar conta
+              
             },
           ),
           ListTile(

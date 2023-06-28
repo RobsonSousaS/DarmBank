@@ -1,11 +1,13 @@
 import 'package:bank_darm/pages/createcard.dart';
 import 'package:bank_darm/pages/imports.dart';
+
 class CreateAccountPage extends StatefulWidget {
   @override
   _CreateAccountPageState createState() => _CreateAccountPageState();
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,40 +54,66 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   SizedBox(height: 5.0),
                   TitleTextFieldWidget(
-                      title: 'Nome completo',
-                      controller: TextEditingController(),
-                      width: 400, obscureText: false,),
+                    title: 'Nome completo',
+                    controller: TextEditingController(),
+                    width: 400,
+                    obscureText: false,
+                  ),
                   TitleTextFieldWidget(
-                      title: 'E-mail',
-                      controller: TextEditingController(),
-                      width: 400,obscureText: false,),
+                    title: 'E-mail',
+                    controller: TextEditingController(),
+                    width: 400,
+                    obscureText: false,
+                  ),
                   TitleTextFieldWidget(
-                      title: 'CPF',
-                      controller: TextEditingController(),
-                      width: 400,obscureText: false,),
+                    title: 'CPF',
+                    controller: TextEditingController(),
+                    width: 400,
+                    obscureText: false,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
+                  ),
                   TitleTextFieldWidget(
-                      title: 'Telefone',
-                      controller: TextEditingController(),
-                      width: 400,obscureText: false,),
+                    title: 'Telefone',
+                    controller: TextEditingController(),
+                    width: 400,
+                    obscureText: false,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
+                  ),
                   Row(
                     children: [
                       TitleTextFieldWidget(
-                          title: 'Endereço',
-                          controller: TextEditingController(),
-                          width: 250,obscureText: false,),
-                          SizedBox(width: 10,),
+                        title: 'Endereço',
+                        controller: TextEditingController(),
+                        width: 250,
+                        obscureText: false,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       DropWidget()
                     ],
                   ),
                   RadioConta(),
                   TitleTextFieldWidget(
-                      title: 'Senha',
-                      controller: TextEditingController(),
-                      width: 400,obscureText: true,),
+                    title: 'Senha',
+                    controller: TextEditingController(),
+                    width: 400,
+                    obscureText: true,
+                  ),
                   TitleTextFieldWidget(
-                      title: 'Confirmar senha',
-                      controller: TextEditingController(),
-                      width: 400,obscureText: true,),
+                    title: 'Confirmar senha',
+                    controller: TextEditingController(),
+                    width: 400,
+                    obscureText: true,
+                  ),
                   SizedBox(
                     height: 5,
                   ),
@@ -93,11 +121,11 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreatecardPage(),
-                            ),
-                          );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreatecardPage(),
+                          ),
+                        );
                       },
                       child: Center(
                         child: Text(

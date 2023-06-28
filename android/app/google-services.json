@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1073854986367",
+    "project_id": "darmbankbd",
+    "storage_bucket": "darmbankbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073854986367:android:ae8065552621e2173fa74a",
+        "android_client_info": {
+          "package_name": "com.example.bank_darm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073854986367-jjoavrvgt4q5d043qluu72etopv8gpg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBHpbeeGXasgLsiZ9dWu_IoqhqSZV4OjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073854986367-jjoavrvgt4q5d043qluu72etopv8gpg2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1073854986367-fu5bvc9uinpm8dmoqbi5a7tlpjt53up9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bankDarm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -49,31 +49,47 @@ class _CarddemonstPageState extends State<CarddemonstPage> {
                   TitleTextFieldWidget(
                     title: 'Número do Cartão',
                     controller: TextEditingController(),
-                    width: 400,  obscureText: false,
+                    width: 400,
+                    obscureText: false,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CartaoBancarioInputFormatter(),
+                    ],
                   ),
                   Row(
                     children: [
                       TitleTextFieldWidget(
                         title: 'CVC',
                         controller: TextEditingController(),
-                        width: 160,  obscureText: false,
+                        width: 160,
+                        obscureText: false,
                         keyboardType: TextInputType.number,
+                        maxLength: 3,
                       ),
-                      SizedBox(width: 40,),
+                      SizedBox(
+                        width: 40,
+                      ),
                       DropAnos(),
                     ],
                   ),
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: TextEditingController(),
-                    width: 400,  obscureText: false,
+                    width: 400,
+                    obscureText: false,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
                   ),
-                  SizedBox(height: 80.0),
+                  DropCardtype(),
+                  SizedBox(height: 5.0),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () {Navigator.pushReplacement(
+                      onPressed: () {
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => CardPage(),

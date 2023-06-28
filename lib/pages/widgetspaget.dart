@@ -1,12 +1,13 @@
 import 'package:bank_darm/pages/imports.dart';
 
-
 class TitleTextFieldWidget extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final double width;
   final bool obscureText;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final int maxLength;
 
   TitleTextFieldWidget({
     required this.title,
@@ -14,6 +15,8 @@ class TitleTextFieldWidget extends StatelessWidget {
     required this.width,
     required this.obscureText,
     this.keyboardType,
+    this.inputFormatters,
+    this.maxLength = 50,
   });
   @override
   Widget build(BuildContext context) {
@@ -40,11 +43,14 @@ class TitleTextFieldWidget extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
+            maxLength: maxLength,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
               ),
               contentPadding: contentPadding,
+              counterText: '',
             ),
           ),
         )
@@ -399,6 +405,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
     );
   }
 }
+
 class CardWidget extends StatelessWidget {
   final String cardNumber;
   final String cardHolderName;
@@ -427,7 +434,7 @@ class CardWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Padding(
+          Padding(
             padding: EdgeInsets.all(8),
             child: Text(
               cardType,
@@ -447,7 +454,9 @@ class CardWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: EdgeInsets.only(left: 8),
             child: Text(
@@ -471,15 +480,15 @@ class CardWidget extends StatelessWidget {
                 ),
               ),
               Padding(
-            padding: EdgeInsets.only(left: 250),
-            child: Text(
-              cvc,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
+                padding: EdgeInsets.only(left: 250),
+                child: Text(
+                  cvc,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ),
             ],
           ),
         ],
@@ -487,7 +496,6 @@ class CardWidget extends StatelessWidget {
     );
   }
 }
-
 
 class DropAnos extends StatefulWidget {
   const DropAnos({Key? key});
@@ -503,7 +511,7 @@ class _DropAnosState extends State<DropAnos> {
     '4 Anos',
     '5 Anos',
     '6 Anos',
-    ];
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -563,7 +571,12 @@ class DropCardtype extends StatefulWidget {
 class _DropCardtypeState extends State<DropCardtype> {
   String cardSelecionado = 'Visa';
   List<String> card = [
-    'Visa', 'MasterCard', 'Elo', 'Hibercard', 'American Express'];
+    'Visa',
+    'MasterCard',
+    'Elo',
+    'Hibercard',
+    'American Express'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -577,7 +590,7 @@ class _DropCardtypeState extends State<DropCardtype> {
           height: 7,
         ),
         Text(
-          'Data de Validade',
+          'Tipo de cartão',
           style: GoogleFonts.karla(
             fontWeight: FontWeight.bold,
             fontSize: 12.0,
@@ -587,32 +600,31 @@ class _DropCardtypeState extends State<DropCardtype> {
         Container(
           width: 160,
           height: 50,
-          child: DropdownButtonFormField<String>(
-            value: cardSelecionado,
-            onChanged: (String? newValue) {
-              setState(() {
-                cardSelecionado = newValue!;
-              });
-            },
+          child: InputDecorator(
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6.0),
               ),
               contentPadding: contentPadding,
             ),
-            items: card.map((String card) {
-              return DropdownMenuItem<String>(
-                value: card,
-                child: Text(card, style: TextStyle(fontSize: 12.0)),
-              );
-            }).toList(),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: cardSelecionado,
+                onChanged: null,
+                items: card.map((String card) {
+                  return DropdownMenuItem<String>(
+                    value: card,
+                    child: Text(card, style: TextStyle(fontSize: 12.0)),
+                  );
+                }).toList(),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 }
-
 
 class CardsWidget extends StatelessWidget {
   @override
@@ -626,12 +638,12 @@ class CardsWidget extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.arrow_forward),
           onPressed: () {
-                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CardDetailsPage(),
-                  ),
-                );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CardDetailsPage(),
+              ),
+            );
           },
         ),
       ),
@@ -644,47 +656,42 @@ class CardStatus extends StatelessWidget {
 
   final int status;
 
-  
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (status == 1)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.check_circle, color: Colors.green),
-                    SizedBox(width: 8),
-                    Text('Aprovado', style: TextStyle(fontSize: 16)),
-                  ],
-                ),
-              ),
-            if (status == 2)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.watch_later, color: Colors.orange),
-                    SizedBox(width: 8),
-                    Text('Esperando avaliação', style: TextStyle(fontSize: 16)),
-                  ],
-                ),
-              ),
-            if (status == 3)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.cancel, color: Colors.red),
-                    SizedBox(width: 8),
-                    Text('Reprovado', style: TextStyle(fontSize: 16)),
-                  ],
-                ),
-              ),
-              ]
-              );
-              }
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      if (status == 1)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.green),
+              SizedBox(width: 8),
+              Text('Aprovado', style: TextStyle(fontSize: 16)),
+            ],
+          ),
+        ),
+      if (status == 2)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Icon(Icons.watch_later, color: Colors.orange),
+              SizedBox(width: 8),
+              Text('Esperando avaliação', style: TextStyle(fontSize: 16)),
+            ],
+          ),
+        ),
+      if (status == 3)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Icon(Icons.cancel, color: Colors.red),
+              SizedBox(width: 8),
+              Text('Reprovado', style: TextStyle(fontSize: 16)),
+            ],
+          ),
+        ),
+    ]);
+  }
 }

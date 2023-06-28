@@ -14,3 +14,10 @@ export 'package:bank_darm/pages/listcards.dart';
 export 'package:bank_darm/pages/usercli.dart';
 export 'package:bank_darm/pages/createnewcard.dart';
 export 'package:bank_darm/pages/cardview.dart';
+export 'package:brasil_fields/brasil_fields.dart';
+export 'package:flutter/services.dart';
+export 'package:firebase_core/firebase_core.dart';
+export 'firebase_options.dart';
+
+
+

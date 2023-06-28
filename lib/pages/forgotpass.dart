@@ -1,4 +1,5 @@
 import 'package:bank_darm/pages/imports.dart';
+
 class Forgotpasspage extends StatefulWidget {
   const Forgotpasspage({super.key});
 
@@ -54,19 +55,27 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                   TitleTextFieldWidget(
                     title: 'E-mail',
                     controller: TextEditingController(),
-                    width: 400,  obscureText: false,
+                    width: 400,
+                    obscureText: false,
                   ),
                   SizedBox(height: 10.0),
                   TitleTextFieldWidget(
                     title: 'Nome Comleto',
                     controller: TextEditingController(),
-                    width: 400,  obscureText: false,
+                    width: 400,
+                    obscureText: false,
                   ),
                   SizedBox(height: 10.0),
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: TextEditingController(),
-                    width: 400,  obscureText: false,
+                    width: 400,
+                    obscureText: false,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
                   ),
                   SizedBox(
                     height: 260.0,

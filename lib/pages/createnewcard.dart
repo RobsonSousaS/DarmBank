@@ -152,7 +152,8 @@ class _CardnewdemonstPageState extends State<CardnewdemonstPage> {
                     width: 400,  obscureText: false,
                     keyboardType: TextInputType.number,
                   ),
-                  SizedBox(height: 80.0),
+                  DropCardtype(),
+                  SizedBox(height: 10.0),
                   Container(
                     child: ElevatedButton(
                       onPressed: () {Navigator.pushReplacement(
