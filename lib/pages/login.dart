@@ -1,5 +1,5 @@
 import 'package:bank_darm/pages/createcard.dart';
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -121,7 +121,7 @@ class _LoginpageState extends State<Loginpage> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreatecardPage(),
+                              builder: (context) => ListCliPage(),
                             ),
                           );
                       },

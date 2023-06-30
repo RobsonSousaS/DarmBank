@@ -1,5 +1,5 @@
 import 'package:bank_darm/pages/createcard.dart';
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class CreateAccountPage extends StatefulWidget {
   @override
@@ -123,7 +123,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CreatecardPage(),
+                            builder: (context) => ListCliPage(),
                           ),
                         );
                       },

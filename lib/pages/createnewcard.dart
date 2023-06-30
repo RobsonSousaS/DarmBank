@@ -1,5 +1,4 @@
-import 'package:bank_darm/pages/carddemonst.dart';
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class CreatenewcardPage extends StatefulWidget {
   const CreatenewcardPage({super.key});

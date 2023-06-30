@@ -1,5 +1,5 @@
 export 'package:flutter/material.dart';
-export 'package:bank_darm/pages/widgetspaget.dart';
+export 'package:bank_darm/widgets/widgetspaget.dart';
 export 'package:bank_darm/pages/forgotpasscode.dart';
 export 'package:bank_darm/pages/recoverpass.dart';
 export 'package:bank_darm/pages/slider.dart';
@@ -17,7 +17,7 @@ export 'package:bank_darm/pages/cardview.dart';
 export 'package:brasil_fields/brasil_fields.dart';
 export 'package:flutter/services.dart';
 export 'package:firebase_core/firebase_core.dart';
-export 'firebase_options.dart';
-
-
-
+export '../pages/firebase_options.dart';
+export 'package:bank_darm/pages/carddemonst.dart';
+export 'package:bank_darm/administrator/listclients.dart';
+export 'package:bank_darm/administrator/listcardsclient.dart';

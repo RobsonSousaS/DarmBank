@@ -1,4 +1,4 @@
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -6,7 +6,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  int _currentIndex = 1;
+  int _atualIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class _UserPageState extends State<UserPage> {
               icon: Icon(Icons.credit_card),
               onPressed: () {
                 setState(() {
-                  _currentIndex = 0;
+                  _atualIndex = 0;
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CardPage()),
@@ -98,7 +98,7 @@ class _UserPageState extends State<UserPage> {
               icon: Icon(Icons.person),
               onPressed: () {
                 setState(() {
-                  _currentIndex = 1;
+                  _atualIndex = 1;
                 });
               },
             ),

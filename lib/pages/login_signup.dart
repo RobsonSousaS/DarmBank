@@ -1,4 +1,4 @@
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class Loginsignuppage extends StatelessWidget {
   @override
@@ -14,36 +14,34 @@ class Loginsignuppage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          'assets/logo.png',
-                          height: 410.0,
-                          width: 410.0,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/logo.png',
+                        height: 200.0,
+                        width: 200.0, 
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'Bem vindo ao DarmBank',
+                        style: GoogleFonts.karla(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.0,
                         ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          'Bem vindo ao DarmBank',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
-                          ),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        'O banco para todos',
+                        style: GoogleFonts.karla(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 16.0,
                         ),
-                        SizedBox(height: 8.0),
-                        Text(
-                          'O banco para todos',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        SizedBox(height: 150.0),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 150.0),
+                    ],
                   ),
                 ),
                 ElevatedButton(

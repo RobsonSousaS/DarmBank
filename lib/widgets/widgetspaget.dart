@@ -1,4 +1,4 @@
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class TitleTextFieldWidget extends StatelessWidget {
   final String title;
@@ -642,6 +642,55 @@ class CardsWidget extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => CardDetailsPage(),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class CardsCliWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(16.0),
+      child: ListTile(
+        leading: Icon(Icons.credit_card),
+        title: Text('Cartão de Crédito'),
+        subtitle: Text('**** **** **** 1234'),
+        trailing: IconButton(
+          icon: Icon(Icons.arrow_forward),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CardsCliPage(),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class ClientsWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(16.0),
+      child: ListTile(
+        leading: Icon(Icons.account_circle),
+        title: Text('NOME DO CLIENTE'),
+        trailing: IconButton(
+          icon: Icon(Icons.arrow_forward),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CardsCliPage(),
               ),
             );
           },

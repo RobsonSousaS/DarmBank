@@ -1,4 +1,4 @@
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 class CarddemonstPage extends StatefulWidget {
   const CarddemonstPage({super.key});

@@ -1,9 +1,6 @@
-import 'package:bank_darm/pages/imports.dart';
+import 'package:bank_darm/Imports/imports.dart';
 
 void main() async{
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
   runApp(const MyApp());
 }
 
