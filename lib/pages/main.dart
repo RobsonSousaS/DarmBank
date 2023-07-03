@@ -1,6 +1,8 @@
 import 'package:bank_darm/Imports/imports.dart';
 
-void main() async{
+  void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(const MyApp());
 }
 

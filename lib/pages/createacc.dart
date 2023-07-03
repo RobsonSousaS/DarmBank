@@ -1,5 +1,6 @@
 import 'package:bank_darm/pages/createcard.dart';
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateAccountPage extends StatefulWidget {
   @override
@@ -7,6 +8,17 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
+  final _nomeController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _cpfController = TextEditingController();
+  final _cellController = TextEditingController();
+  final _endeController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _passworddnvController = TextEditingController();
+  TextEditingController estadoController = TextEditingController();
+  TextEditingController contaController = TextEditingController();
+  String estadoSelecionado = 'AC';
+  String tipoContaSelecionado = 'Conta Corrente';
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +67,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   SizedBox(height: 5.0),
                   TitleTextFieldWidget(
                     title: 'Nome completo',
-                    controller: TextEditingController(),
+                    controller: _nomeController,
                     width: 400,
                     obscureText: false,
                   ),
                   TitleTextFieldWidget(
                     title: 'E-mail',
-                    controller: TextEditingController(),
+                    controller: _emailController,
                     width: 400,
                     obscureText: false,
                   ),
                   TitleTextFieldWidget(
                     title: 'CPF',
-                    controller: TextEditingController(),
+                    controller: _cpfController,
                     width: 400,
                     obscureText: false,
                     keyboardType: TextInputType.number,
@@ -78,7 +90,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   TitleTextFieldWidget(
                     title: 'Telefone',
-                    controller: TextEditingController(),
+                    controller: _cellController,
                     width: 400,
                     obscureText: false,
                     keyboardType: TextInputType.number,
@@ -91,26 +103,30 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     children: [
                       TitleTextFieldWidget(
                         title: 'Endereço',
-                        controller: TextEditingController(),
+                        controller: _endeController,
                         width: 250,
                         obscureText: false,
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      DropWidget()
+                      DropWidget(
+                          estadoController: estadoController,
+                          estadoSelecionado: estadoSelecionado),
                     ],
                   ),
-                  RadioConta(),
+                  ContaWidget(
+                      contaController: contaController,
+                      tipoContaSelecionado: tipoContaSelecionado),
                   TitleTextFieldWidget(
                     title: 'Senha',
-                    controller: TextEditingController(),
+                    controller: _passwordController,
                     width: 400,
                     obscureText: true,
                   ),
                   TitleTextFieldWidget(
                     title: 'Confirmar senha',
-                    controller: TextEditingController(),
+                    controller: _passworddnvController,
                     width: 400,
                     obscureText: true,
                   ),
@@ -120,12 +136,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ListCliPage(),
-                          ),
-                        );
+                        createAccount();
                       },
                       child: Center(
                         child: Text(
@@ -186,5 +197,57 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ],
       ),
     );
+  }
+
+  Future<void> createAccount() async {
+    try {
+      String email = _emailController.text;
+      String password = _passwordController.text;
+      // Outros dados do usuário
+      String nome = _nomeController.text;
+      String cpf = _cpfController.text;
+      String telefone = _cellController.text;
+      String endereco = _endeController.text;
+
+      // Verifique se as senhas coincidem
+      if (password != _passworddnvController.text) {
+        // Senhas não coincidem, exiba uma mensagem de erro ou faça o tratamento necessário
+        return;
+      }
+
+      // Crie a conta do usuário com email e senha
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Agora você pode salvar os outros dados do usuário em um banco de dados ou armazenamento, como o Cloud Firestore
+      // Exemplo de como salvar os dados do usuário no Cloud Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'nome': nome,
+        'email': email,
+        'cpf': cpf,
+        'telefone': telefone,
+        'endereco': endereco,
+        'estado': estadoController.text,
+        'tipoConta': contaController.text,
+      });
+
+      // A conta do usuário foi criada com sucesso e os dados foram salvos
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'email-already-in-use') {
+          // Email já está em uso, exiba uma mensagem de erro ou solicite ao usuário que forneça outro email
+        } else {
+          // Outro tipo de erro, trate de acordo com suas necessidades
+        }
+      } else {
+        // Trate outras exceções que não sejam do tipo FirebaseAuthException, se necessário
+      }
+    }
   }
 }

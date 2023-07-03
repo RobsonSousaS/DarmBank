@@ -17,7 +17,10 @@ export 'package:bank_darm/pages/cardview.dart';
 export 'package:brasil_fields/brasil_fields.dart';
 export 'package:flutter/services.dart';
 export 'package:firebase_core/firebase_core.dart';
-export '../pages/firebase_options.dart';
+export 'package:bank_darm/firebase_options.dart';
 export 'package:bank_darm/pages/carddemonst.dart';
 export 'package:bank_darm/administrator/listclients.dart';
 export 'package:bank_darm/administrator/listcardsclient.dart';
+export 'package:cloud_firestore/cloud_firestore.dart';
+export 'package:firebase_auth/firebase_auth.dart';
+

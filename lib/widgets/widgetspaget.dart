@@ -59,83 +59,71 @@ class TitleTextFieldWidget extends StatelessWidget {
   }
 }
 
-class RadioConta extends StatefulWidget {
-  const RadioConta({Key? key}) : super(key: key);
+class ContaWidget extends StatefulWidget {
+  final TextEditingController contaController;
+  final String tipoContaSelecionado;
+  ContaWidget(
+      {required this.contaController, required this.tipoContaSelecionado});
 
-  @override
-  _RadioContaState createState() => _RadioContaState();
+ @override
+  State<ContaWidget> createState() => _ContaWidgetState();
 }
 
-class _RadioContaState extends State<RadioConta> {
-  int _selectedAccountType = 0;
+class _ContaWidgetState extends State<ContaWidget> {
+ String tipoContaSelecionado = 'Conta Corrente';
 
   @override
   void initState() {
+    tipoContaSelecionado = widget.tipoContaSelecionado;
     super.initState();
-    _selectedAccountType = 0;
   }
+  List<String> Contas = [
+    'Conta Corrente',
+    'Conta Poupança',
+  ];
 
   @override
   Widget build(BuildContext context) {
+    EdgeInsets contentPadding =
+        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 5),
+        SizedBox(
+          height: 7,
+        ),
         Text(
-          'Selecione o tipo de conta:',
+          'Selecione o tipo de conta',
           style: GoogleFonts.karla(
             fontWeight: FontWeight.bold,
             fontSize: 12.0,
-            color: Colors.black,
           ),
         ),
-        SizedBox(height: 5),
-        Row(
-          children: [
-            Row(
-              children: [
-                Radio<int>(
-                  value: 0,
-                  groupValue: _selectedAccountType,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedAccountType = value!;
-                    });
-                  },
-                ),
-                Text(
-                  'Conta Corrente',
-                  style: GoogleFonts.karla(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13.0,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+        SizedBox(height: 6),
+        Container(
+          width: 150,
+          height: 50,
+          child: DropdownButtonFormField<String>(
+            value: tipoContaSelecionado,
+            onChanged: (value) {
+              setState(() {
+                tipoContaSelecionado = value!;
+              });
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              contentPadding: contentPadding,
             ),
-            SizedBox(width: 16),
-            Row(
-              children: [
-                Radio<int>(
-                  value: 1,
-                  groupValue: _selectedAccountType,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedAccountType = value!;
-                    });
-                  },
-                ),
-                Text(
-                  'Conta Poupança',
-                  style: GoogleFonts.karla(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13.0,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            items: Contas.map((String Conta) {
+              return DropdownMenuItem<String>(
+                value: Conta,
+                child: Text(Conta, style: TextStyle(fontSize: 12.0)),
+              );
+            }).toList(),
+          ),
         ),
       ],
     );
@@ -143,14 +131,23 @@ class _RadioContaState extends State<RadioConta> {
 }
 
 class DropWidget extends StatefulWidget {
-  const DropWidget({Key? key});
+  final TextEditingController estadoController;
+  final String estadoSelecionado;
+  DropWidget({required this.estadoController, required this.estadoSelecionado});
 
-  @override
+ @override
   State<DropWidget> createState() => _DropWidgetState();
 }
 
 class _DropWidgetState extends State<DropWidget> {
   String estadoSelecionado = 'AC';
+
+  @override
+  void initState() {
+    estadoSelecionado = widget.estadoSelecionado;
+    super.initState();
+  }
+
   List<String> estados = [
     'AC',
     'AL',
@@ -205,9 +202,9 @@ class _DropWidgetState extends State<DropWidget> {
           height: 50,
           child: DropdownButtonFormField<String>(
             value: estadoSelecionado,
-            onChanged: (String? newValue) {
+            onChanged: (value) {
               setState(() {
-                estadoSelecionado = newValue!;
+                estadoSelecionado = value!;
               });
             },
             decoration: InputDecoration(
