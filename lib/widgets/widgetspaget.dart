@@ -59,173 +59,6 @@ class TitleTextFieldWidget extends StatelessWidget {
   }
 }
 
-class ContaWidget extends StatefulWidget {
-  final TextEditingController contaController;
-  final String tipoContaSelecionado;
-  ContaWidget(
-      {required this.contaController, required this.tipoContaSelecionado});
-
- @override
-  State<ContaWidget> createState() => _ContaWidgetState();
-}
-
-class _ContaWidgetState extends State<ContaWidget> {
- String tipoContaSelecionado = 'Conta Corrente';
-
-  @override
-  void initState() {
-    tipoContaSelecionado = widget.tipoContaSelecionado;
-    super.initState();
-  }
-  List<String> Contas = [
-    'Conta Corrente',
-    'Conta Poupança',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    EdgeInsets contentPadding =
-        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 7,
-        ),
-        Text(
-          'Selecione o tipo de conta',
-          style: GoogleFonts.karla(
-            fontWeight: FontWeight.bold,
-            fontSize: 12.0,
-          ),
-        ),
-        SizedBox(height: 6),
-        Container(
-          width: 150,
-          height: 50,
-          child: DropdownButtonFormField<String>(
-            value: tipoContaSelecionado,
-            onChanged: (value) {
-              setState(() {
-                tipoContaSelecionado = value!;
-              });
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              contentPadding: contentPadding,
-            ),
-            items: Contas.map((String Conta) {
-              return DropdownMenuItem<String>(
-                value: Conta,
-                child: Text(Conta, style: TextStyle(fontSize: 12.0)),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class DropWidget extends StatefulWidget {
-  final TextEditingController estadoController;
-  final String estadoSelecionado;
-  DropWidget({required this.estadoController, required this.estadoSelecionado});
-
- @override
-  State<DropWidget> createState() => _DropWidgetState();
-}
-
-class _DropWidgetState extends State<DropWidget> {
-  String estadoSelecionado = 'AC';
-
-  @override
-  void initState() {
-    estadoSelecionado = widget.estadoSelecionado;
-    super.initState();
-  }
-
-  List<String> estados = [
-    'AC',
-    'AL',
-    'AP',
-    'AM',
-    'BA',
-    'CE',
-    'DF',
-    'ES',
-    'GO',
-    'MA',
-    'MT',
-    'MS',
-    'MG',
-    'PA',
-    'PB',
-    'PR',
-    'PE',
-    'PI',
-    'RJ',
-    'RN',
-    'RS',
-    'RO',
-    'RR',
-    'SC',
-    'SP',
-    'SE',
-    'TO'
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    EdgeInsets contentPadding =
-        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 7,
-        ),
-        Text(
-          'Estado',
-          style: GoogleFonts.karla(
-            fontWeight: FontWeight.bold,
-            fontSize: 12.0,
-          ),
-        ),
-        SizedBox(height: 6),
-        Container(
-          width: 100,
-          height: 50,
-          child: DropdownButtonFormField<String>(
-            value: estadoSelecionado,
-            onChanged: (value) {
-              setState(() {
-                estadoSelecionado = value!;
-              });
-            },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              contentPadding: contentPadding,
-            ),
-            items: estados.map((String estado) {
-              return DropdownMenuItem<String>(
-                value: estado,
-                child: Text(estado, style: TextStyle(fontSize: 12.0)),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class PasscodeDigitTextField extends StatefulWidget {
   final FocusNode focusNode;
   final TextEditingController controller;
@@ -739,5 +572,148 @@ class CardStatus extends StatelessWidget {
           ),
         ),
     ]);
+  }
+}
+
+
+class TipoContaDropdownWidget extends StatefulWidget {
+  final TextEditingController tipoContaController;
+
+  TipoContaDropdownWidget({required this.tipoContaController});
+
+  @override
+  _TipoContaDropdownWidgetState createState() => _TipoContaDropdownWidgetState();
+}
+
+class _TipoContaDropdownWidgetState extends State<TipoContaDropdownWidget> {
+  String tipoContaSelecionado = 'Conta Poupança';
+  List<String> tiposConta = ['Conta Poupança', 'Conta Corrente'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 7),
+        Text(
+          'Tipo de Conta',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12.0,
+          ),
+        ),
+        SizedBox(height: 6),
+        Container(
+          width: 150,
+          height: 50,
+          child: DropdownButtonFormField<String>(
+            value: tipoContaSelecionado,
+            onChanged: (value) {
+              setState(() {
+                tipoContaSelecionado = value!;
+              });
+              widget.tipoContaController.text = value!;
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
+            ),
+            items: tiposConta.map((String tipoConta) {
+              return DropdownMenuItem<String>(
+                value: tipoConta,
+                child: Text(tipoConta, style: TextStyle(fontSize: 12.0)),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EstadoDropdownWidget extends StatefulWidget {
+  final TextEditingController estadoController;
+  
+  EstadoDropdownWidget({required this.estadoController});
+
+  @override
+  _EstadoDropdownWidgetState createState() => _EstadoDropdownWidgetState();
+}
+
+class _EstadoDropdownWidgetState extends State<EstadoDropdownWidget> {
+  String estadoSelecionado = 'AC';
+  List<String> estados = [
+    'AC',
+    'AL',
+    'AP',
+    'AM',
+    'BA',
+    'CE',
+    'DF',
+    'ES',
+    'GO',
+    'MA',
+    'MT',
+    'MS',
+    'MG',
+    'PA',
+    'PB',
+    'PR',
+    'PE',
+    'PI',
+    'RJ',
+    'RN',
+    'RS',
+    'RO',
+    'RR',
+    'SC',
+    'SP',
+    'SE',
+    'TO',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 7),
+        Text(
+          'Estado',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12.0,
+          ),
+        ),
+        SizedBox(height: 6),
+        Container(
+          width: 100,
+          height: 50,
+          child: DropdownButtonFormField<String>(
+            value: estadoSelecionado,
+            onChanged: (value) {
+              setState(() {
+                estadoSelecionado = value!;
+              });
+              widget.estadoController.text = value!;
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
+            ),
+            items: estados.map((String estado) {
+              return DropdownMenuItem<String>(
+                value: estado,
+                child: Text(estado, style: TextStyle(fontSize: 12.0)),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
   }
 }

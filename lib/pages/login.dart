@@ -1,5 +1,5 @@
-import 'package:bank_darm/pages/createcard.dart';
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:flutter/material.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -9,6 +9,9 @@ class Loginpage extends StatefulWidget {
 }
 
 class _LoginpageState extends State<Loginpage> {
+  TextEditingController _cpfController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,18 +65,20 @@ class _LoginpageState extends State<Loginpage> {
                   SizedBox(height: 60.0),
                   TitleTextFieldWidget(
                     title: 'CPF',
-                    controller: TextEditingController(),
+                    controller: _cpfController,
                     width: 400,
                     obscureText: false,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       CpfInputFormatter(),
-                    ],),
+                    ],
+                  ),
                   TitleTextFieldWidget(
                     title: 'Senha',
-                    controller: TextEditingController(),
-                    width: 400, obscureText: true,
+                    controller: _passwordController,
+                    width: 400,
+                    obscureText: true,
                   ),
                   SizedBox(
                     height: 10,
@@ -118,12 +123,7 @@ class _LoginpageState extends State<Loginpage> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ListCliPage(),
-                            ),
-                          );
+                        loginWithCPF();
                       },
                       child: Center(
                         child: Text(
@@ -183,4 +183,31 @@ class _LoginpageState extends State<Loginpage> {
       ),
     );
   }
+
+  Future<void> loginWithCPF() async {
+  String cpf = _cpfController.text;
+  String password = _passwordController.text;
+  
+  try {
+    String email = '$cpf@dominio.com';
+    
+    // Autentique o usuário usando o Firebase Authentication
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    // Verifique se o login foi bem-sucedido
+    if (userCredential.user != null) {
+      // O login foi bem-sucedido, faça o que for necessário, como navegar para a próxima tela
+      print('Login bem-sucedido: ${userCredential.user!.uid}');
+    } else {
+      // O login falhou, trate conforme necessário
+      print('Login falhou');
+    }
+  } catch (e) {
+    // Trate o erro de login conforme necessário
+    print('Erro de login: $e');
+  }
+}
 }
