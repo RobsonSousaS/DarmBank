@@ -16,9 +16,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final _passwordController = TextEditingController();
   final _passworddnvController = TextEditingController();
   TextEditingController estadoController = TextEditingController();
-  TextEditingController contaController = TextEditingController();
-  String estadoSelecionado = 'AC';
-  String tipoContaSelecionado = 'Conta Corrente';
+  TextEditingController tipoContaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +108,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       SizedBox(
                         width: 10,
                       ),
-                      DropWidget(
-                          estadoController: estadoController,
-                          estadoSelecionado: estadoSelecionado),
+                      EstadoDropdownWidget(estadoController: estadoController)
                     ],
                   ),
-                  ContaWidget(
-                      contaController: contaController,
-                      tipoContaSelecionado: tipoContaSelecionado),
+                  TipoContaDropdownWidget(
+                    tipoContaController: tipoContaController,
+                  ),
                   TitleTextFieldWidget(
                     title: 'Senha',
                     controller: _passwordController,
@@ -201,13 +197,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   Future<void> createAccount() async {
     try {
-      String email = _emailController.text;
+      
       String password = _passwordController.text;
+
       // Outros dados do usuário
+      String emailacc = _emailController.text;
       String nome = _nomeController.text;
       String cpf = _cpfController.text;
       String telefone = _cellController.text;
       String endereco = _endeController.text;
+      String estado = estadoController.text;
+      String tipoConta = tipoContaController.text;
+      String email = '$cpf@dominio.com';
 
       // Verifique se as senhas coincidem
       if (password != _passworddnvController.text) {
@@ -229,12 +230,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           .doc(userCredential.user!.uid)
           .set({
         'nome': nome,
-        'email': email,
+        'email': emailacc,
         'cpf': cpf,
         'telefone': telefone,
         'endereco': endereco,
-        'estado': estadoController.text,
-        'tipoConta': contaController.text,
+        'tipoConta': tipoConta,
+        'estado': estado,
       });
 
       // A conta do usuário foi criada com sucesso e os dados foram salvos
@@ -248,6 +249,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       } else {
         // Trate outras exceções que não sejam do tipo FirebaseAuthException, se necessário
       }
+      print('Erro ao criar conta: $e');
     }
   }
 }
