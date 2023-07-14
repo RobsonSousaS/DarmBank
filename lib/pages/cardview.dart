@@ -31,6 +31,7 @@ class CardDetailsPage extends StatelessWidget {
                 expiryDate: '12/24',
                 cardType: 'Cartão de XXXX',
                 cvc: '123',
+                cardSelector: 'ainda nao',
               ),
             ),
           ),

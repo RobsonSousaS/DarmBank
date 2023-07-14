@@ -1,4 +1,3 @@
-import 'package:bank_darm/pages/carddemonst.dart';
 import 'package:bank_darm/Imports/imports.dart';
 
 class CreatecardPage extends StatefulWidget {
@@ -9,6 +8,32 @@ class CreatecardPage extends StatefulWidget {
 }
 
 class _CreatecardPageState extends State<CreatecardPage> {
+  String selectedCardType = '';
+
+  void _createUserCard() async {
+  // Obtenha a instância do Firestore
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // Obtenha o ID do usuário atualmente autenticado
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  try {
+    // Crie um novo documento na coleção "cards" dentro do documento do usuário
+    await firestore
+        .collection('users')
+        .doc(userId)
+        .collection('cards')
+        .add({
+      'tipo': selectedCardType,
+    });
+
+    print('Novo cartão criado com sucesso!');
+  } catch (e) {
+    print('Erro ao criar novo cartão: $e');
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,17 +64,23 @@ class _CreatecardPageState extends State<CreatecardPage> {
                     ),
                   ),
                   SizedBox(height: 10.0),
-                  RadioButtonsWidget(),
+                  RadioButtonsWidget(onChanged: (value) {
+              setState(() {
+                selectedCardType = value;
+              });
+            },),
                   SizedBox(height: 220.0),
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CarddemonstPage(),
-                          ),
-                        );
+                         _createUserCard();
+                         Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CarddemonstPage(),
+                            ),
+                          );
+
                       },
                       child: Center(
                         child: Text(

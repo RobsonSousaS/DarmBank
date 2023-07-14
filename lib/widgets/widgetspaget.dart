@@ -8,6 +8,7 @@ class TitleTextFieldWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final int maxLength;
+  final void Function(String)? onChanged;
 
   TitleTextFieldWidget({
     required this.title,
@@ -17,6 +18,7 @@ class TitleTextFieldWidget extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.maxLength = 50,
+    this.onChanged
   });
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class TitleTextFieldWidget extends StatelessWidget {
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
             maxLength: maxLength,
+            onChanged: onChanged,
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5.0),
@@ -107,6 +110,10 @@ class _PasscodeDigitTextFieldState extends State<PasscodeDigitTextField> {
 }
 
 class RadioButtonsWidget extends StatefulWidget {
+  final ValueChanged<String>? onChanged;
+
+  const RadioButtonsWidget({Key? key, this.onChanged}) : super(key: key);
+
   @override
   _RadioButtonsWidgetState createState() => _RadioButtonsWidgetState();
 }
@@ -127,6 +134,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
                 onChanged: (value) {
                   setState(() {
                     selectedPair = value!;
+                    widget.onChanged?.call('Débito');
                   });
                 },
               ),
@@ -147,6 +155,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
                 onChanged: (value) {
                   setState(() {
                     selectedPair = value!;
+                    widget.onChanged?.call('Crédito');
                   });
                 },
               ),
@@ -167,6 +176,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
                 onChanged: (value) {
                   setState(() {
                     selectedPair = value!;
+                    widget.onChanged?.call('Poupança');
                   });
                 },
               ),
@@ -183,7 +193,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
             height: 30,
           ),
           Text(
-            'Você também tem opção de selecionar cartões multifuncionais',
+            'Você também tem a opção de selecionar cartões multifuncionais',
             style: GoogleFonts.karla(
               fontWeight: FontWeight.w400,
               fontSize: 14.0,
@@ -198,6 +208,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
                 onChanged: (value) {
                   setState(() {
                     selectedPair = value!;
+                    widget.onChanged?.call('Crédito e Débito');
                   });
                 },
               ),
@@ -218,6 +229,7 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
                 onChanged: (value) {
                   setState(() {
                     selectedPair = value!;
+                    widget.onChanged?.call('Poupança e Débito');
                   });
                 },
               ),
@@ -236,12 +248,14 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
   }
 }
 
+
 class CardWidget extends StatelessWidget {
   final String cardNumber;
   final String cardHolderName;
   final String expiryDate;
   final String cardType;
   final String cvc;
+  final String cardSelector;
 
   CardWidget({
     required this.cardNumber,
@@ -249,6 +263,7 @@ class CardWidget extends StatelessWidget {
     required this.expiryDate,
     required this.cardType,
     required this.cvc,
+    required this.cardSelector,
   });
 
   @override
@@ -266,12 +281,30 @@ class CardWidget extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(8),
-            child: Text(
-              cardType,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    cardType,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      cardSelector,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -328,7 +361,9 @@ class CardWidget extends StatelessWidget {
 }
 
 class DropAnos extends StatefulWidget {
-  const DropAnos({Key? key});
+  final void Function(String)? onChanged;
+
+  const DropAnos({this.onChanged});
 
   @override
   State<DropAnos> createState() => _DropAnosState();
@@ -336,12 +371,18 @@ class DropAnos extends StatefulWidget {
 
 class _DropAnosState extends State<DropAnos> {
   String anoSelecionado = '2 Anos';
-  List<String> ano = [
+  List<String> anos = [
     '2 Anos',
     '4 Anos',
     '5 Anos',
     '6 Anos',
   ];
+
+  void _updateExpiryDate(String selectedValue) {
+    if (widget.onChanged != null) {
+      widget.onChanged!(selectedValue);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -371,6 +412,7 @@ class _DropAnosState extends State<DropAnos> {
               setState(() {
                 anoSelecionado = newValue!;
               });
+              _updateExpiryDate(anoSelecionado);
             },
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -378,7 +420,7 @@ class _DropAnosState extends State<DropAnos> {
               ),
               contentPadding: contentPadding,
             ),
-            items: ano.map((String ano) {
+            items: anos.map((String ano) {
               return DropdownMenuItem<String>(
                 value: ano,
                 child: Text(ano, style: TextStyle(fontSize: 12.0)),
@@ -391,80 +433,23 @@ class _DropAnosState extends State<DropAnos> {
   }
 }
 
-class DropCardtype extends StatefulWidget {
-  const DropCardtype({Key? key});
 
-  @override
-  State<DropCardtype> createState() => _DropCardtypeState();
-}
 
-class _DropCardtypeState extends State<DropCardtype> {
-  String cardSelecionado = 'Visa';
-  List<String> card = [
-    'Visa',
-    'MasterCard',
-    'Elo',
-    'Hibercard',
-    'American Express'
-  ];
 
-  @override
-  Widget build(BuildContext context) {
-    EdgeInsets contentPadding =
-        EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 7,
-        ),
-        Text(
-          'Tipo de cartão',
-          style: GoogleFonts.karla(
-            fontWeight: FontWeight.bold,
-            fontSize: 12.0,
-          ),
-        ),
-        SizedBox(height: 6),
-        Container(
-          width: 160,
-          height: 50,
-          child: InputDecorator(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-              ),
-              contentPadding: contentPadding,
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: cardSelecionado,
-                onChanged: null,
-                items: card.map((String card) {
-                  return DropdownMenuItem<String>(
-                    value: card,
-                    child: Text(card, style: TextStyle(fontSize: 12.0)),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class CardsWidget extends StatelessWidget {
+  final String cardType;
+   final String cardNumber;
+
+   CardsWidget({required this.cardType, required this.cardNumber});
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(16.0),
       child: ListTile(
         leading: Icon(Icons.credit_card),
-        title: Text('Cartão de Crédito'),
-        subtitle: Text('**** **** **** 1234'),
+        title: Text(cardType),
+        subtitle: Text(cardNumber),
         trailing: IconButton(
           icon: Icon(Icons.arrow_forward),
           onPressed: () {
@@ -575,14 +560,14 @@ class CardStatus extends StatelessWidget {
   }
 }
 
-
 class TipoContaDropdownWidget extends StatefulWidget {
   final TextEditingController tipoContaController;
 
   TipoContaDropdownWidget({required this.tipoContaController});
 
   @override
-  _TipoContaDropdownWidgetState createState() => _TipoContaDropdownWidgetState();
+  _TipoContaDropdownWidgetState createState() =>
+      _TipoContaDropdownWidgetState();
 }
 
 class _TipoContaDropdownWidgetState extends State<TipoContaDropdownWidget> {
@@ -618,7 +603,8 @@ class _TipoContaDropdownWidgetState extends State<TipoContaDropdownWidget> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6.0),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
             ),
             items: tiposConta.map((String tipoConta) {
               return DropdownMenuItem<String>(
@@ -635,7 +621,7 @@ class _TipoContaDropdownWidgetState extends State<TipoContaDropdownWidget> {
 
 class EstadoDropdownWidget extends StatefulWidget {
   final TextEditingController estadoController;
-  
+
   EstadoDropdownWidget({required this.estadoController});
 
   @override
@@ -703,7 +689,8 @@ class _EstadoDropdownWidgetState extends State<EstadoDropdownWidget> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6.0),
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
             ),
             items: estados.map((String estado) {
               return DropdownMenuItem<String>(

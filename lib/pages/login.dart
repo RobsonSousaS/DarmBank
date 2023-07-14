@@ -1,8 +1,7 @@
 import 'package:bank_darm/Imports/imports.dart';
-import 'package:flutter/material.dart';
 
 class Loginpage extends StatefulWidget {
-  const Loginpage({super.key});
+  const Loginpage({Key? key}) : super(key: key);
 
   @override
   State<Loginpage> createState() => _LoginpageState();
@@ -187,20 +186,36 @@ class _LoginpageState extends State<Loginpage> {
   Future<void> loginWithCPF() async {
   String cpf = _cpfController.text;
   String password = _passwordController.text;
-  
+
   try {
-    String email = '$cpf@dominio.com';
-    
+    String email = await getEmailFromCPF(cpf);
+
     // Autentique o usuário usando o Firebase Authentication
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
 
     // Verifique se o login foi bem-sucedido
     if (userCredential.user != null) {
-      // O login foi bem-sucedido, faça o que for necessário, como navegar para a próxima tela
-      print('Login bem-sucedido: ${userCredential.user!.uid}');
+      // O login foi bem-sucedido, verifique se o usuário possui cartões
+      String userId = userCredential.user!.uid;
+      bool hasCards = await checkIfUserHasCards(userId);
+
+      if (hasCards) {
+        // O usuário possui cartões, redirecione para a tela CardsPage
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CardPage()),
+        );
+      } else {
+        // O usuário não possui cartões, redirecione para a tela CreatecardPage
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => CreatecardPage()),
+        );
+      }
     } else {
       // O login falhou, trate conforme necessário
       print('Login falhou');
@@ -208,6 +223,55 @@ class _LoginpageState extends State<Loginpage> {
   } catch (e) {
     // Trate o erro de login conforme necessário
     print('Erro de login: $e');
+    if (e is Exception) {
+      print(e.toString());
+    } else {
+      print('Erro desconhecido: $e');
+    }
   }
 }
+
+
+  Future<String> getEmailFromCPF(String cpf) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    QuerySnapshot querySnapshot =
+        await firestore.collection('users').where('cpf', isEqualTo: cpf).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      var data = querySnapshot.docs[0].data();
+      if (data != null &&
+          data is Map<String, dynamic> &&
+          data['email'] != null) {
+        return data['email'] as String; // Conversão explícita para String
+      } else {
+        throw Exception('Email not found');
+      }
+    } else {
+      throw Exception('CPF not found');
+    }
+  }
+}
+
+Future<bool> checkIfUserHasCards(String userId) async {
+  try {
+    // Obtenha a instância do Firestore
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Obtenha a referência para a coleção "cards" do usuário
+    CollectionReference cardsCollection = firestore
+        .collection('users')
+        .doc(userId)
+        .collection('cards');
+
+    // Faça uma consulta para obter os documentos de cartão
+    QuerySnapshot querySnapshot = await cardsCollection.limit(1).get();
+
+    // Verifique se há documentos de cartão
+    return querySnapshot.size > 0;
+  } catch (e) {
+    // Trate o erro ao verificar se o usuário possui cartões, se necessário
+    print('Erro ao verificar se o usuário possui cartões: $e');
+    return false;
+  }
 }

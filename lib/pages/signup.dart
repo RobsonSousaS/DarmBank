@@ -201,14 +201,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       String password = _passwordController.text;
 
       // Outros dados do usuário
-      String emailacc = _emailController.text;
+      String email = _emailController.text;
       String nome = _nomeController.text;
       String cpf = _cpfController.text;
       String telefone = _cellController.text;
       String endereco = _endeController.text;
       String estado = estadoController.text;
       String tipoConta = tipoContaController.text;
-      String email = '$cpf@dominio.com';
 
       // Verifique se as senhas coincidem
       if (password != _passworddnvController.text) {
@@ -230,16 +229,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           .doc(userCredential.user!.uid)
           .set({
         'nome': nome,
-        'email': emailacc,
+        'email': email,
         'cpf': cpf,
         'telefone': telefone,
         'endereco': endereco,
         'tipoConta': tipoConta,
         'estado': estado,
       });
-
+       Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => CreatecardPage()));
       // A conta do usuário foi criada com sucesso e os dados foram salvos
-    } catch (e) {
+    } 
+    catch (e) {
       if (e is FirebaseAuthException) {
         if (e.code == 'email-already-in-use') {
           // Email já está em uso, exiba uma mensagem de erro ou solicite ao usuário que forneça outro email
