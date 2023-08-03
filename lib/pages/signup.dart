@@ -1,4 +1,3 @@
-import 'package:bank_darm/pages/createcard.dart';
 import 'package:bank_darm/Imports/imports.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -56,7 +55,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   SizedBox(height: 2.0),
                   Text(
-                    'Abra uma conta no BankMe com alguns detalhes.',
+                    'Abra uma conta no DarmBank com alguns detalhes.',
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.w400,
                       fontSize: 14.0,

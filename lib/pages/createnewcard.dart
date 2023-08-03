@@ -1,128 +1,14 @@
 import 'package:bank_darm/Imports/imports.dart';
 import 'package:intl/intl.dart';
 
-class CreatenewcardPage extends StatefulWidget {
-  const CreatenewcardPage({super.key});
+class CarddemonstNewPage extends StatefulWidget {
+  const CarddemonstNewPage({super.key});
 
   @override
-  State<CreatenewcardPage> createState() => _CreatenewcardPageState();
+  State<CarddemonstNewPage> createState() => _CarddemonstNewPageState();
 }
 
-class _CreatenewcardPageState extends State<CreatenewcardPage> {
-  String selectedCardType = '';
-
-  void _createUserCard() async {
-  // Obtenha a instância do Firestore
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  // Obtenha o ID do usuário atualmente autenticado
-  String userId = FirebaseAuth.instance.currentUser!.uid;
-
-  try {
-    // Crie um novo documento na coleção "cards" dentro do documento do usuário
-    await firestore
-        .collection('users')
-        .doc(userId)
-        .collection('cards')
-        .add({
-      'tipo': selectedCardType,
-    });
-
-    print('Novo cartão criado com sucesso!');
-  } catch (e) {
-    print('Erro ao criar novo cartão: $e');
-  }
-}
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-          ),
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Text(
-                    'Deseja cadastrar um novo cartão?',
-                    style: GoogleFonts.karla(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                        color: Color.fromARGB(255, 0, 102, 246)),
-                  ),
-                  SizedBox(height: 20.0),
-                  Text(
-                    'Selecione o tipo de cartão que deseja cadastrar.',
-                    style: GoogleFonts.karla(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  RadioButtonsWidget(onChanged: (value) {
-              setState(() {
-                selectedCardType = value;
-              });
-            },),
-                  SizedBox(height: 220.0),
-                  Container(
-                    child: ElevatedButton(
-                      onPressed: () {
-                         _createUserCard();
-                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CardnewdemonstPage(),
-                            ),
-                          );
-
-                      },
-                      child: Center(
-                        child: Text(
-                          'VAMOS CONTINUAR!',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 60.0, vertical: 14.0),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color(0xFF0066F6),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-
-class CardnewdemonstPage extends StatefulWidget {
-  const CardnewdemonstPage({super.key});
-
-  @override
-  State<CardnewdemonstPage> createState() => _CardnewdemonstPageState();
-}
-
-class _CardnewdemonstPageState extends State<CardnewdemonstPage> {
+class _CarddemonstNewPageState extends State<CarddemonstNewPage> {
   TextEditingController _cardNumberController = TextEditingController();
   TextEditingController _cardHolderNameController = TextEditingController();
   TextEditingController _cvcController = TextEditingController();
@@ -130,18 +16,28 @@ class _CardnewdemonstPageState extends State<CardnewdemonstPage> {
   String cardType = '';
   String cvc = '';
   String typeCard = '';
+  List<QueryDocumentSnapshot> cardSnapshots = [];
 
-  @override
   @override
   void initState() {
     super.initState();
     _fetchUserData();
     _updateExpiryDate();
-    _fetchCardType().then((value) {
-      setState(() {
-        typeCard = value;
-      });
+    fetchCardDataForNewCard().then((snapshots) {
+      if (mounted) {
+        setState(() {
+          cardSnapshots = snapshots;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _cardNumberController.dispose();
+    _cardHolderNameController.dispose();
+    _cvcController.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchUserData() async {
@@ -176,7 +72,7 @@ class _CardnewdemonstPageState extends State<CardnewdemonstPage> {
     }
   }
 
-  Future<String> _fetchCardType() async {
+  Future<void> _updateCardDocument() async {
     // Obtenha a instância do Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -188,80 +84,51 @@ class _CardnewdemonstPageState extends State<CardnewdemonstPage> {
       CollectionReference cardsCollection =
           firestore.collection('users').doc(userId).collection('cards');
 
-      // Faça uma consulta para obter os documentos de cartão
-      QuerySnapshot querySnapshot = await cardsCollection.get();
+      // Obtenha o primeiro documento da coleção "cards"
+      QuerySnapshot querySnapshot = await cardsCollection.limit(1).get();
 
-      // Verifique se há documentos de cartão
       if (querySnapshot.size > 0) {
         // Obtenha o primeiro documento retornado
         QueryDocumentSnapshot cardSnapshot = querySnapshot.docs[0];
 
-        // Obtenha o valor do campo "tipo"
-        String typeCard =
-            cardSnapshot.get('tipo')?.toString() ?? 'Desconhecido';
-        print('Tipo de cartão: $typeCard');
-        return typeCard;
+        // Obtenha os dados do documento como um Map<String, dynamic>
+        Map<String, dynamic> cardData =
+            cardSnapshot.data() as Map<String, dynamic>;
+
+        // Verifique se o campo "tipo" está presente nos dados do documento
+        if (cardData.containsKey('tipo')) {
+          // Obtenha o ID do documento
+          String docId = cardSnapshot.id;
+
+          // Atualize os campos do documento com os valores do CardWidget
+          await cardsCollection.doc(docId).update({
+            'cardNumber': _cardNumberController.text,
+            'cardHolderName': _cardHolderNameController.text,
+            'expiryDate': expiryDate,
+            'cardType': 'Cartão de $typeCard',
+            'cvc': cvc,
+            'cardSelector': cardType,
+            'Status': 'Em Análise',
+          });
+
+          print('Documento de cartão atualizado com sucesso!');
+
+          // After updating the document, update the controllers with new values
+          setState(() {
+            _cardNumberController.text = _cardNumberController.text;
+            _cardHolderNameController.text = _cardHolderNameController.text;
+            _cvcController.text = cvc;
+          });
+        } else {
+          print('O campo "tipo" não existe no documento de cartão.');
+        }
       } else {
-        // Documentos de cartão não encontrados
-        return 'Desconhecido';
+        print('Nenhum documento de cartão encontrado para atualizar.');
       }
     } catch (e) {
-      // Trate o erro ao buscar os dados do cartão, se necessário
-      print('Erro ao buscar os dados do cartão: $e');
-      return 'Desconhecido';
+      print('Erro ao atualizar o documento de cartão: $e');
     }
   }
-
-Future<void> _updateCardDocument() async {
-  // Obtenha a instância do Firestore
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  // Obtenha o ID do usuário atualmente autenticado
-  String userId = FirebaseAuth.instance.currentUser!.uid;
-
-  try {
-    // Obtenha a referência para a coleção "cards" do usuário
-    CollectionReference cardsCollection =
-        firestore.collection('users').doc(userId).collection('cards');
-
-    // Obtenha o primeiro documento da coleção "cards"
-    QuerySnapshot querySnapshot = await cardsCollection.limit(1).get();
-
-    if (querySnapshot.size > 0) {
-      // Obtenha o primeiro documento retornado
-      QueryDocumentSnapshot cardSnapshot = querySnapshot.docs[0];
-
-      // Obtenha os dados do documento como um Map<String, dynamic>
-      Map<String, dynamic> cardData = cardSnapshot.data() as Map<String, dynamic>;
-
-      // Verifique se o campo "tipo" está presente nos dados do documento
-      if (cardData.containsKey('tipo')) {
-        // Obtenha o ID do documento
-        String docId = cardSnapshot.id;
-
-        // Atualize os campos do documento com os valores do CardWidget
-        await cardsCollection.doc(docId).update({
-          'cardNumber': _cardNumberController.text,
-          'cardHolderName': _cardHolderNameController.text,
-          'expiryDate': expiryDate,
-          'cardType': 'Cartão de $typeCard',
-          'cvc': cvc,
-          'cardSelector': cardType,
-          'Status': 'Em Analise',
-        });
-
-        print('Documento de cartão atualizado com sucesso!');
-      } else {
-        print('O campo "tipo" não existe no documento de cartão.');
-      }
-    } else {
-      print('Nenhum documento de cartão encontrado para atualizar.');
-    }
-  } catch (e) {
-    print('Erro ao atualizar o documento de cartão: $e');
-  }
-}
-
 
   void _updateExpiryDate([String selectedValue = '2 Anos']) {
     DateTime now = DateTime.now();
@@ -311,7 +178,7 @@ Future<void> _updateCardDocument() async {
               delegate: SliverChildListDelegate(
                 [
                   Text(
-                    'Primeira visualização do seu cartão!',
+                    'Primeira visualização do seu novo cartão!',
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
@@ -379,11 +246,11 @@ Future<void> _updateCardDocument() async {
                         _cardNumberController.text = _cardNumberController.text;
                         _cvcController.text = _cvcController.text;
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CardPage(),
-                            ),
-                          );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CardPage(),
+                          ),
+                        );
                       });
                     },
                     child: Center(
@@ -411,5 +278,193 @@ Future<void> _updateCardDocument() async {
         ],
       ),
     );
+  }
+}
+
+Future<String> _fetchCardType(String cardId) async {
+  // Obtenha a instância do Firestore
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // Obtenha o ID do usuário atualmente autenticado
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  try {
+    // Obtenha a referência para o documento do cartão específico
+    DocumentSnapshot cardSnapshot = await firestore
+        .collection('users')
+        .doc(userId)
+        .collection('cards')
+        .doc(cardId) // Use o cardId aqui para obter o documento específico
+        .get();
+
+    if (cardSnapshot.exists) {
+      String typeCard = cardSnapshot.get('tipo')?.toString() ?? 'Desconhecido';
+      print('Tipo de cartão: $typeCard');
+      return typeCard;
+    } else {
+      // Documento de cartão não encontrado
+      return 'Desconhecido';
+    }
+  } catch (e) {
+    print('Erro ao buscar os dados do cartão: $e');
+    return 'Desconhecido';
+  }
+}
+
+class CreateNewcardPage extends StatefulWidget {
+  const CreateNewcardPage({super.key});
+
+  @override
+  State<CreateNewcardPage> createState() => _CreateNewcardPageState();
+}
+
+class _CreateNewcardPageState extends State<CreateNewcardPage> {
+  String selectedCardType = '';
+  int totalCards = 0;
+  String typeCard = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _createUserCard();
+  }
+
+  void _createUserCard() async {
+    // Obtenha a instância do Firestore
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Obtenha o ID do usuário atualmente autenticado
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    try {
+      // Crie um novo documento na coleção "cards" dentro do documento do usuário
+      DocumentReference<Map<String, dynamic>> newCardRef = await firestore
+          .collection('users')
+          .doc(userId)
+          .collection('cards')
+          .add({
+        'tipo': selectedCardType,
+      });
+
+      String newCardId = newCardRef.id; // Obtemos o ID do novo cartão criado
+
+      print('Novo cartão criado com sucesso! ID: $newCardId');
+
+      // Agora, vamos passar o cardId para a função _fetchCardType
+      // Agora, vamos passar o cardId para a função _fetchCardType
+      String cardType = await _fetchCardType(newCardId);
+      if (mounted) {
+        setState(() {
+          typeCard = cardType;
+        });
+      }
+
+      print('Novo cartão criado com sucesso!');
+    } catch (e) {
+      print('Erro ao criar novo cartão: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Text(
+                    'Deseja cadastrar um novo cartão?',
+                    style: GoogleFonts.karla(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30.0,
+                        color: Color.fromARGB(255, 0, 102, 246)),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Selecione o tipo de cartão que deseja criar.',
+                    style: GoogleFonts.karla(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  RadioButtonsWidget(
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCardType = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 220.0),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _createUserCard();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CarddemonstNewPage(),
+                          ),
+                        );
+                      },
+                      child: Center(
+                        child: Text(
+                          'VAMOS CONTINUAR!',
+                          style: GoogleFonts.karla(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 60.0, vertical: 14.0),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Color(0xFF0066F6),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Future<List<QueryDocumentSnapshot>> fetchCardDataForNewCard() async {
+  // Obtenha a instância do Firestore
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // Obtenha o ID do usuário atualmente autenticado
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+
+  try {
+    // Obtenha a referência para a coleção "cards" do usuário
+    CollectionReference<Map<String, dynamic>> cardsCollection =
+        firestore.collection('users').doc(userId).collection('cards');
+
+    // Faça uma consulta para obter os documentos de cartão
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await cardsCollection.get();
+
+    // Retorna a lista de documentos de cartão
+    return querySnapshot.docs;
+  } catch (e) {
+    // Trate o erro, se necessário
+    print('Erro ao buscar os dados do cartão: $e');
+    return [];
   }
 }

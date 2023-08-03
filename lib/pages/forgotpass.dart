@@ -8,9 +8,9 @@ class Forgotpasspage extends StatefulWidget {
 }
 
 class _ForgotpasspageState extends State<Forgotpasspage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _nomeController = TextEditingController();
-  TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _cpfController = TextEditingController();
 
   Future<void> resetPassword() async {
     try {
@@ -25,12 +25,14 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
       }
 
       // Recupere as informações do usuário com base no email e cpf fornecidos
-      User? user = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email)
+      User? user = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(email)
           .then((signInMethods) {
         if (!signInMethods.contains('password')) {
           throw FirebaseAuthException(
               code: 'user-not-found',
-              message: 'Usuário não encontrado. Verifique as informações fornecidas.');
+              message:
+                  'Usuário não encontrado. Verifique as informações fornecidas.');
         }
       });
 
@@ -58,7 +60,7 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
             elevation: 0,
             backgroundColor: Colors.transparent,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.close,
                 color: Colors.black,
               ),
@@ -66,14 +68,14 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Loginpage(),
+                    builder: (context) => const Loginpage(),
                   ),
                 );
               },
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.fromLTRB(16.0, 60.0, 16.0, 0),
+            padding: const EdgeInsets.fromLTRB(16.0, 60.0, 16.0, 0),
             sliver: SliverList(
               delegate: SliverChildListDelegate(
                 [
@@ -82,10 +84,10 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
-                      color: Color.fromARGB(255, 0, 102, 246),
+                      color: const Color.fromARGB(255, 0, 102, 246),
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   Text(
                     'Insira as informações abaixo para recuperar sua senha.',
                     style: GoogleFonts.karla(
@@ -93,21 +95,21 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                       fontSize: 14.0,
                     ),
                   ),
-                  SizedBox(height: 50.0),
+                  const SizedBox(height: 50.0),
                   TitleTextFieldWidget(
                     title: 'E-mail',
                     controller: _emailController,
                     width: 400,
                     obscureText: false,
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   TitleTextFieldWidget(
                     title: 'Nome Completo',
                     controller: _nomeController,
                     width: 400,
                     obscureText: false,
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: _cpfController,
@@ -119,12 +121,19 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                       CpfInputFormatter(),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 260.0,
                   ),
                   Container(
                     child: ElevatedButton(
-                      onPressed: resetPassword,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ForgotpassMessage()),
+                        );
+                        resetPassword;
+                      },
                       child: Center(
                         child: Text(
                           'RECUPERE SUA SENHA',
@@ -136,10 +145,11 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                       ),
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 60.0, vertical: 14.0),
+                          const EdgeInsets.symmetric(
+                              horizontal: 60.0, vertical: 14.0),
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
-                          Color(0xFF0066F6),
+                          const Color(0xFF0066F6),
                         ),
                       ),
                     ),
@@ -149,6 +159,66 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ForgotpassMessage extends StatelessWidget {
+  const ForgotpassMessage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.email,
+                size: 100,
+                color: Colors.blue,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Uma mensagem foi enviada para o seu email, por favor verifique',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Loginpage()),
+                  );
+                },
+                child: Center(
+                  child: Text(
+                    'LOGAR',
+                    style: GoogleFonts.karla(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    const EdgeInsets.symmetric(horizontal: 60.0, vertical: 14.0),
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color(0xFF0066F6),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

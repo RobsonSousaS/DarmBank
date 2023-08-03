@@ -85,17 +85,13 @@ class _LoginpageState extends State<Loginpage> {
                   Row(
                     children: [
                       Text(
-                        'Esqueceu sua senha?,',
+                        'Esqueceu sua senha?',
                         style: GoogleFonts.karla(
                           fontWeight: FontWeight.w400,
                           fontSize: 13.0,
                           color: Colors.black,
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -223,6 +219,16 @@ class _LoginpageState extends State<Loginpage> {
   } catch (e) {
     // Trate o erro de login conforme necessário
     print('Erro de login: $e');
+     showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Erro de login'),
+            content: Text(
+                'Senha ou CPF estão incorretos. Verifique suas credenciais.'),
+          );
+        },
+     );
     if (e is Exception) {
       print(e.toString());
     } else {
