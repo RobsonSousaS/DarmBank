@@ -1,6 +1,139 @@
 import 'package:bank_darm/Imports/imports.dart';
 import 'package:intl/intl.dart';
 
+
+class CreateNewcardPage extends StatefulWidget {
+  const CreateNewcardPage({super.key});
+
+  @override
+  State<CreateNewcardPage> createState() => _CreateNewcardPageState();
+}
+
+class _CreateNewcardPageState extends State<CreateNewcardPage> {
+  String selectedCardType = '';
+  int totalCards = 0;
+  String typeCard = '';
+
+  Future<void> _createUserCardWithCustomId(String cardType) async {
+    // Obtenha a instância do Firestore
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Obtenha o ID do usuário atualmente autenticado
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    try {
+      // Generate a unique ID for the card (e.g., using a timestamp)
+      String cardId = DateTime.now().millisecondsSinceEpoch.toString();
+
+      // Add the new card to the "cards" collection using the custom ID
+      await firestore
+          .collection('users')
+          .doc(userId)
+          .collection('cards')
+          .doc(cardId)
+          .set({
+        'tipo': typeCard,
+      });
+
+      // Now, pass the cardId to the function _fetchCardType
+      String cardType = await _fetchCardType(cardId);
+      setState(() {
+        typeCard = cardType;
+      });
+
+      print('Novo cartão criado com sucesso! ID: $cardId');
+    } catch (e) {
+      print('Erro ao criar novo cartão: $e');
+    }
+  }
+
+  void _createUserCard() async {
+    if (selectedCardType.isNotEmpty) {
+      _createUserCardWithCustomId(selectedCardType);
+    } else {
+      print('Selecione o tipo de cartão antes de criar.');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Text(
+                    'Deseja cadastrar um novo cartão?',
+                    style: GoogleFonts.karla(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30.0,
+                        color: Color.fromARGB(255, 0, 102, 246)),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    'Selecione o tipo de cartão que deseja criar.',
+                    style: GoogleFonts.karla(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  RadioButtonsWidget(
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCardType = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 220.0),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _createUserCard();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CarddemonstNewPage(),
+                          ),
+                        );
+                      },
+                      child: Center(
+                        child: Text(
+                          'VAMOS CONTINUAR?',
+                          style: GoogleFonts.karla(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(
+                              horizontal: 60.0, vertical: 14.0),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Color(0xFF0066F6),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CarddemonstNewPage extends StatefulWidget {
   const CarddemonstNewPage({super.key});
 
@@ -307,129 +440,5 @@ Future<String> _fetchCardType(String cardId) async {
     // Trate o erro ao buscar os dados do cartão, se necessário
     print('Erro ao buscar os dados do cartão: $e');
     return 'Desconhecido';
-  }
-}
-
-class CreateNewcardPage extends StatefulWidget {
-  const CreateNewcardPage({super.key});
-
-  @override
-  State<CreateNewcardPage> createState() => _CreateNewcardPageState();
-}
-
-class _CreateNewcardPageState extends State<CreateNewcardPage> {
-  String selectedCardType = '';
-  int totalCards = 0;
-  String typeCard = '';
-
-  void _createUserCard() async {
-    // Obtenha a instância do Firestore
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Obtenha o ID do usuário atualmente autenticado
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-
-    try {
-      // Crie um novo documento na coleção "cards" dentro do documento do usuário
-      DocumentReference<Map<String, dynamic>> newCardRef = await firestore
-          .collection('users')
-          .doc(userId)
-          .collection('cards')
-          .add({
-        'tipo': selectedCardType,
-      });
-
-      String newCardId = newCardRef.id; // Obtemos o ID do novo cartão criado
-
-      print('Novo cartão criado com sucesso! ID: $newCardId');
-
-      // Agora, vamos passar o cardId para a função _fetchCardType
-      String cardType = await _fetchCardType(newCardId);
-      setState(() {
-        typeCard = cardType;
-      });
-
-      print('Novo cartão criado com sucesso!');
-    } catch (e) {
-      print('Erro ao criar novo cartão: $e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-          ),
-          SliverPadding(
-            padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Text(
-                    'Deseja cadastrar um novo cartão?',
-                    style: GoogleFonts.karla(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                        color: Color.fromARGB(255, 0, 102, 246)),
-                  ),
-                  SizedBox(height: 20.0),
-                  Text(
-                    'Selecione o tipo de cartão que deseja criar.',
-                    style: GoogleFonts.karla(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  RadioButtonsWidget(
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCardType = value;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 220.0),
-                  Container(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _createUserCard();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CarddemonstNewPage(),
-                          ),
-                        );
-                      },
-                      child: Center(
-                        child: Text(
-                          'VAMOS CONTINUAR?',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 60.0, vertical: 14.0),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color(0xFF0066F6),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
