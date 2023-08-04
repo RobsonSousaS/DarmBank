@@ -16,28 +16,25 @@ class _CarddemonstNewPageState extends State<CarddemonstNewPage> {
   String cardType = '';
   String cvc = '';
   String typeCard = '';
-  List<QueryDocumentSnapshot> cardSnapshots = [];
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> cardSnapshots = [];
 
   @override
   void initState() {
     super.initState();
     _fetchUserData();
     _updateExpiryDate();
-    fetchCardDataForNewCard().then((snapshots) {
-      if (mounted) {
-        setState(() {
-          cardSnapshots = snapshots;
+
+    // Vamos buscar o primeiro documento da coleção "cards"
+    fetchCardData().then((cardSnapshots) {
+      if (cardSnapshots.isNotEmpty) {
+        String firstCardId = cardSnapshots[0].id;
+        _fetchCardType(firstCardId).then((value) {
+          setState(() {
+            typeCard = value;
+          });
         });
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _cardNumberController.dispose();
-    _cardHolderNameController.dispose();
-    _cvcController.dispose();
-    super.dispose();
   }
 
   Future<void> _fetchUserData() async {
@@ -112,13 +109,6 @@ class _CarddemonstNewPageState extends State<CarddemonstNewPage> {
           });
 
           print('Documento de cartão atualizado com sucesso!');
-
-          // After updating the document, update the controllers with new values
-          setState(() {
-            _cardNumberController.text = _cardNumberController.text;
-            _cardHolderNameController.text = _cardHolderNameController.text;
-            _cvcController.text = cvc;
-          });
         } else {
           print('O campo "tipo" não existe no documento de cartão.');
         }
@@ -128,6 +118,14 @@ class _CarddemonstNewPageState extends State<CarddemonstNewPage> {
     } catch (e) {
       print('Erro ao atualizar o documento de cartão: $e');
     }
+  }
+
+  Future<void> _loadCardData() async {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> snapshots =
+        await fetchCardData();
+    setState(() {
+      cardSnapshots = snapshots;
+    });
   }
 
   void _updateExpiryDate([String selectedValue = '2 Anos']) {
@@ -178,7 +176,7 @@ class _CarddemonstNewPageState extends State<CarddemonstNewPage> {
               delegate: SliverChildListDelegate(
                 [
                   Text(
-                    'Primeira visualização do seu novo cartão!',
+                    'Primeira visualização do seu cartão!',
                     style: GoogleFonts.karla(
                       fontWeight: FontWeight.bold,
                       fontSize: 30.0,
@@ -240,18 +238,17 @@ class _CarddemonstNewPageState extends State<CarddemonstNewPage> {
                   ),
                   const SizedBox(height: 190.0),
                   ElevatedButton(
-                    onPressed: () {
-                      _updateCardDocument();
-                      setState(() {
-                        _cardNumberController.text = _cardNumberController.text;
-                        _cvcController.text = _cvcController.text;
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CardPage(),
-                          ),
-                        );
-                      });
+                    onPressed: () async {
+                      await _updateCardDocument();
+                      _cardNumberController.text = _cardNumberController.text;
+                      _cvcController.text = _cvcController.text;
+                      await _loadCardData(); // Load cards again after update
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CardPage(),
+                        ),
+                      );
                     },
                     child: Center(
                       child: Text(
@@ -298,6 +295,7 @@ Future<String> _fetchCardType(String cardId) async {
         .get();
 
     if (cardSnapshot.exists) {
+      // Obtenha o valor do campo "tipo"
       String typeCard = cardSnapshot.get('tipo')?.toString() ?? 'Desconhecido';
       print('Tipo de cartão: $typeCard');
       return typeCard;
@@ -306,6 +304,7 @@ Future<String> _fetchCardType(String cardId) async {
       return 'Desconhecido';
     }
   } catch (e) {
+    // Trate o erro ao buscar os dados do cartão, se necessário
     print('Erro ao buscar os dados do cartão: $e');
     return 'Desconhecido';
   }
@@ -322,12 +321,6 @@ class _CreateNewcardPageState extends State<CreateNewcardPage> {
   String selectedCardType = '';
   int totalCards = 0;
   String typeCard = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _createUserCard();
-  }
 
   void _createUserCard() async {
     // Obtenha a instância do Firestore
@@ -351,13 +344,10 @@ class _CreateNewcardPageState extends State<CreateNewcardPage> {
       print('Novo cartão criado com sucesso! ID: $newCardId');
 
       // Agora, vamos passar o cardId para a função _fetchCardType
-      // Agora, vamos passar o cardId para a função _fetchCardType
       String cardType = await _fetchCardType(newCardId);
-      if (mounted) {
-        setState(() {
-          typeCard = cardType;
-        });
-      }
+      setState(() {
+        typeCard = cardType;
+      });
 
       print('Novo cartão criado com sucesso!');
     } catch (e) {
@@ -416,7 +406,7 @@ class _CreateNewcardPageState extends State<CreateNewcardPage> {
                       },
                       child: Center(
                         child: Text(
-                          'VAMOS CONTINUAR!',
+                          'VAMOS CONTINUAR?',
                           style: GoogleFonts.karla(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,
@@ -441,30 +431,5 @@ class _CreateNewcardPageState extends State<CreateNewcardPage> {
         ],
       ),
     );
-  }
-}
-
-Future<List<QueryDocumentSnapshot>> fetchCardDataForNewCard() async {
-  // Obtenha a instância do Firestore
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  // Obtenha o ID do usuário atualmente autenticado
-  String userId = FirebaseAuth.instance.currentUser!.uid;
-
-  try {
-    // Obtenha a referência para a coleção "cards" do usuário
-    CollectionReference<Map<String, dynamic>> cardsCollection =
-        firestore.collection('users').doc(userId).collection('cards');
-
-    // Faça uma consulta para obter os documentos de cartão
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-        await cardsCollection.get();
-
-    // Retorna a lista de documentos de cartão
-    return querySnapshot.docs;
-  } catch (e) {
-    // Trate o erro, se necessário
-    print('Erro ao buscar os dados do cartão: $e');
-    return [];
   }
 }

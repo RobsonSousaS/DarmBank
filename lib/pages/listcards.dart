@@ -32,8 +32,22 @@ Future<void> _handleAddCardButton(BuildContext context) async {
 class _CardPageState extends State<CardPage> {
   int _currentIndex = 0;
   String cardNumber = '';
+  List<Map<String, dynamic>> cardSnapshots = [];
 
   @override
+  void initState() {
+    super.initState();
+    _loadCardData();
+  }
+
+  Future<void> _loadCardData() async {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> snapshots =
+        await fetchCardData();
+    setState(() {
+      cardSnapshots = snapshots.map((snapshot) => snapshot.data()).toList();
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +146,8 @@ class _CardPageState extends State<CardPage> {
   }
 }
 
-Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> fetchCardData() async {
+Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+    fetchCardData() async {
   try {
     // Obtenha a instância do Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
