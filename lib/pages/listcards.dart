@@ -82,15 +82,15 @@ class _CardPageState extends State<CardPage> {
               itemCount: cardSnapshots.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> cardData = cardSnapshots[index].data();
-
                 String cardType = cardData['cardType']?.toString() ?? '';
                 String cardNumber = cardData['cardNumber']?.toString() ?? '';
-
-                print('Cartão $index - Tipo: $cardType, Número: $cardNumber');
+                String cardId = cardSnapshots[index]
+                    .id; // Get the cardId from the QueryDocumentSnapshot
 
                 return CardsWidget(
                   cardType: cardType,
                   cardNumber: cardNumber,
+                  cardId: cardId, // Pass the cardId here
                 );
               },
             );
@@ -176,6 +176,10 @@ Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
 }
 
 class CardDetailsPage extends StatelessWidget {
+  final String cardId;
+
+  CardDetailsPage({required this.cardId});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,63 +197,116 @@ class CardDetailsPage extends StatelessWidget {
           },
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              width: 400,
-              child: CardWidget(
-                cardNumber: '1234 5678 9012 3456',
-                cardHolderName: 'JOHN DOE',
-                expiryDate: '12/24',
-                cardType: 'Cartão de XXXX',
-                cvc: '123',
-                cardSelector: 'ainda nao',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Status da Solicitação',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          CardStatus(status: 2,),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-                      onPressed: () {
-                        
-                      },
-                      child: Center(
-                        child: Text(
-                          'DELETAR CARTÃO',
-                          style: GoogleFonts.karla(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(
-                              horizontal: 60.0, vertical: 14.0),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color(0xFF0066F6),
+      body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        future: fetchCardDetails(), // Fetch the card details using the cardId
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Erro ao carregar os detalhes do cartão'),
+            );
+          } else if (snapshot.hasData) {
+            Map<String, dynamic>? cardData = snapshot.data?.data();
+
+            if (cardData == null) {
+              return Center(
+                child: Text('Detalhes do cartão não encontrados'),
+              );
+            }
+
+            String cardNumber = cardData['cardNumber']?.toString() ?? '';
+            String cardHolderName = cardData['cardHolderName']?.toString() ?? '';
+            String expiryDate = cardData['expiryDate']?.toString() ?? '';
+            String cardType = cardData['cardType']?.toString() ?? '';
+            String cvc = cardData['cvc']?.toString() ?? '';
+            String cardSelector = cardData['cardSelector']?.toString() ?? '';
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    width: 400,
+                    child: CardWidget(
+                      cardNumber: cardNumber,
+                      cardHolderName: cardHolderName,
+                      expiryDate: expiryDate,
+                      nameCard: cardType,
+                      cvc: cvc,
+                      cardSelector: cardSelector,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Status da Solicitação',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                CardStatus(status: 2),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Implement the delete card functionality here
+                    },
+                    child: Center(
+                      child: Text(
+                        'DELETAR CARTÃO',
+                        style: GoogleFonts.karla(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
                         ),
                       ),
                     ),
-          ),
-        ],
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 60.0, vertical: 14.0),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Color(0xFF0066F6),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Center(
+              child: Text('Nenhum cartão encontrado'),
+            );
+          }
+        },
       ),
     );
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> fetchCardDetails() async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+
+      DocumentReference<Map<String, dynamic>> cardRef = firestore
+          .collection('users')
+          .doc(userId)
+          .collection('cards')
+          .doc(cardId);
+
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await cardRef.get();
+
+      return snapshot;
+    } catch (e) {
+      print('Erro ao buscar os detalhes do cartão: $e');
+      throw e;
+    }
   }
 }

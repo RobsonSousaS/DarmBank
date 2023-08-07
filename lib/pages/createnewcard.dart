@@ -81,6 +81,7 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
         'expiryDate': expiryDate,
         'cardType': 'Cartão de ${widget.selectedCardType}',
         'cvc': cvc,
+        'marca': cardType,
         'Status': 'Em Analise',
       });
 
@@ -159,7 +160,7 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
                     cardNumber: _cardNumberController.text,
                     cardHolderName: _cardHolderNameController.text,
                     expiryDate: expiryDate,
-                    cardType: 'Cartão de ${widget.selectedCardType}',
+                    nameCard: 'Cartão de ${widget.selectedCardType}',
                     cvc: cvc,
                     cardSelector: cardType,
                   ),

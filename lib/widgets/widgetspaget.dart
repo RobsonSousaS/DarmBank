@@ -251,7 +251,7 @@ class CardWidget extends StatelessWidget {
   final String cardNumber;
   final String cardHolderName;
   final String expiryDate;
-  final String cardType;
+  final String nameCard;
   final String cvc;
   final String cardSelector;
 
@@ -259,7 +259,7 @@ class CardWidget extends StatelessWidget {
     required this.cardNumber,
     required this.cardHolderName,
     required this.expiryDate,
-    required this.cardType,
+    required this.nameCard,
     required this.cvc,
     required this.cardSelector,
   });
@@ -283,7 +283,7 @@ class CardWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    cardType,
+                    nameCard,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -434,8 +434,14 @@ class _DropAnosState extends State<DropAnos> {
 class CardsWidget extends StatelessWidget {
   final String cardType;
   final String cardNumber;
+  final String cardId; // Add the cardId parameter
 
-  CardsWidget({required this.cardType, required this.cardNumber});
+  CardsWidget({
+    required this.cardType,
+    required this.cardNumber,
+    required this.cardId, // Pass the cardId here
+  });
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -450,7 +456,7 @@ class CardsWidget extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => CardDetailsPage(),
+                builder: (context) => CardDetailsPage(cardId: cardId), // Pass the cardId here
               ),
             );
           },
@@ -459,6 +465,7 @@ class CardsWidget extends StatelessWidget {
     );
   }
 }
+
 
 class CardsCliWidget extends StatelessWidget {
   @override

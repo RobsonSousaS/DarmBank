@@ -182,7 +182,7 @@ Future<void> _updateCardDocument() async {
                     cardNumber: _cardNumberController.text,
                     cardHolderName: _cardHolderNameController.text,
                     expiryDate: expiryDate,
-                    cardType: 'Cartão de $typeCard',
+                    nameCard: 'Cartão de $typeCard',
                     cvc: cvc,
                     cardSelector: cardType,
                   ),
