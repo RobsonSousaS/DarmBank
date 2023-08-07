@@ -10,16 +10,15 @@ class TitleTextFieldWidget extends StatelessWidget {
   final int maxLength;
   final void Function(String)? onChanged;
 
-  TitleTextFieldWidget({
-    required this.title,
-    required this.controller,
-    required this.width,
-    required this.obscureText,
-    this.keyboardType,
-    this.inputFormatters,
-    this.maxLength = 50,
-    this.onChanged
-  });
+  TitleTextFieldWidget(
+      {required this.title,
+      required this.controller,
+      required this.width,
+      required this.obscureText,
+      this.keyboardType,
+      this.inputFormatters,
+      this.maxLength = 50,
+      this.onChanged});
   @override
   Widget build(BuildContext context) {
     EdgeInsets contentPadding =
@@ -119,7 +118,7 @@ class RadioButtonsWidget extends StatefulWidget {
 }
 
 class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
-  int selectedPair = 0;
+  int? selectedPair;
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +246,6 @@ class _RadioButtonsWidgetState extends State<RadioButtonsWidget> {
     );
   }
 }
-
 
 class CardWidget extends StatelessWidget {
   final String cardNumber;
@@ -433,15 +431,11 @@ class _DropAnosState extends State<DropAnos> {
   }
 }
 
-
-
-
-
 class CardsWidget extends StatelessWidget {
   final String cardType;
-   final String cardNumber;
+  final String cardNumber;
 
-   CardsWidget({required this.cardType, required this.cardNumber});
+  CardsWidget({required this.cardType, required this.cardNumber});
   @override
   Widget build(BuildContext context) {
     return Card(
