@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 import 'package:intl/intl.dart';
 
 class CardNewDemonstPage extends StatefulWidget {
@@ -215,12 +216,7 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
                       setState(() {
                         _cardNumberController.text = _cardNumberController.text;
                         _cvcController.text = _cvcController.text;
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CardPage(),
-                          ),
-                        );
+                        routers.go('/listcards');
                       });
                     },
                     child: Center(
@@ -340,17 +336,7 @@ class _CreateNewcardPageState extends State<CreateNewcardPage> {
                         setState(() {
                           newCard = selectedCardType;
                         });
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CardNewDemonstPage(
-                              newCard: newCard,
-                              selectedCardType:
-                                  selectedCardType, // Passa o newCard para a próxima página
-                            ),
-                          ),
-                        );
+                        routers.go('/demonstnewcard/$newCard/$selectedCardType');
                       },
                       child: Center(
                         child: Text(

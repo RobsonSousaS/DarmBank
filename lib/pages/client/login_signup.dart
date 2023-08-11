@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 
 class Loginsignuppage extends StatelessWidget {
   @override
@@ -46,12 +47,7 @@ class Loginsignuppage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateAccountPage(),
-                      ),
-                    );
+                    routers.go('/signup');
                   },
                   child: Text(
                     'CRIAR SUA CONTA GRATUITAMENTE',
@@ -72,12 +68,7 @@ class Loginsignuppage extends StatelessWidget {
                 SizedBox(height: 10.0),
                 InkWell(
                   onTap: () {
-                     Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Loginpage(),
-                      ),
-                    );
+                     routers.go('/login');
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -88,12 +79,14 @@ class Loginsignuppage extends StatelessWidget {
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Text(
-                      'LOGAR EM SUA CONTA',
-                      style: GoogleFonts.karla(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.0,
-                        color: Colors.black,
+                    child: Center(
+                      child: Text(
+                        'LOGAR EM SUA CONTA',
+                        style: GoogleFonts.karla(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),

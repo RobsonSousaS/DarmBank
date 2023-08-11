@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 
 class Forgotpasspage extends StatefulWidget {
   const Forgotpasspage({Key? key}) : super(key: key);
@@ -13,43 +14,41 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
   final TextEditingController _cpfController = TextEditingController();
 
   Future<void> resetPassword() async {
-    try {
-      String email = _emailController.text;
-      String nome = _nomeController.text;
-      String cpf = _cpfController.text;
+  try {
+    String email = _emailController.text;
+    String nome = _nomeController.text;
+    String cpf = _cpfController.text;
 
-      // Verifique se todos os campos estão preenchidos
-      if (email.isEmpty || nome.isEmpty || cpf.isEmpty) {
-        // Exiba uma mensagem de erro ou faça o tratamento necessário para campos não preenchidos
-        return;
-      }
+    // Verifique se todos os campos estão preenchidos
+    if (email.isEmpty || nome.isEmpty || cpf.isEmpty) {
+      // Exiba uma mensagem de erro ou faça o tratamento necessário para campos não preenchidos
+      return;
+    }
 
-      // Recupere as informações do usuário com base no email e cpf fornecidos
-      User? user = await FirebaseAuth.instance
-          .fetchSignInMethodsForEmail(email)
-          .then((signInMethods) {
-        if (!signInMethods.contains('password')) {
-          throw FirebaseAuthException(
-              code: 'user-not-found',
-              message:
-                  'Usuário não encontrado. Verifique as informações fornecidas.');
-        }
-      });
+    // Verifique se o usuário existe
+    final signInMethods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    if (!signInMethods.contains('password')) {
+      throw FirebaseAuthException(
+          code: 'user-not-found',
+          message: 'Usuário não encontrado. Verifique as informações fornecidas.');
+    }
 
-      // Envie o e-mail de redefinição de senha para o usuário
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    // Envie o e-mail de redefinição de senha para o usuário
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
-      // Exiba uma mensagem de sucesso ou faça o tratamento necessário
-      print('E-mail de redefinição de senha enviado com sucesso para $email');
-    } catch (e) {
-      // Trate o erro de redefinição de senha conforme necessário
-      if (e is FirebaseAuthException) {
-        print('Erro ao redefinir senha: ${e.code} - ${e.message}');
-      } else {
-        print('Erro ao redefinir senha: $e');
-      }
+    // Exiba uma mensagem de sucesso ou faça o tratamento necessário
+    print('E-mail de redefinição de senha enviado com sucesso para $email');
+    routers.go('/passwordmessag');
+  } catch (e) {
+    // Trate o erro de redefinição de senha conforme necessário
+    if (e is FirebaseAuthException) {
+      print('Erro ao redefinir senha: ${e.code} - ${e.message}');
+    } else {
+      print('Erro ao redefinir senha: $e');
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +64,7 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Loginpage(),
-                  ),
-                );
+                routers.go('/login');
               },
             ),
           ),
@@ -127,12 +121,7 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ForgotpassMessage()),
-                        );
-                        resetPassword;
+                        resetPassword();
                       },
                       child: Center(
                         child: Text(
@@ -193,10 +182,7 @@ class ForgotpassMessage extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Loginpage()),
-                  );
+                  routers.go('/login');
                 },
                 child: Center(
                   child: Text(

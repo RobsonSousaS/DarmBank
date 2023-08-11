@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 import 'package:intl/intl.dart';
 
 class CarddemonstPage extends StatefulWidget {
@@ -237,12 +238,7 @@ Future<void> _updateCardDocument() async {
                       setState(() {
                         _cardNumberController.text = _cardNumberController.text;
                         _cvcController.text = _cvcController.text;
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CardPage(),
-                            ),
-                          );
+                        routers.go('/listcards');
                       });
                     },
                     child: Center(
@@ -391,12 +387,7 @@ class _CreatecardPageState extends State<CreatecardPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         _createUserCard();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CarddemonstPage(),
-                          ),
-                        );
+                        routers.go('/demonstcard');
                       },
                       child: Center(
                         child: Text(

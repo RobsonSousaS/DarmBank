@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 
 class TitleTextFieldWidget extends StatelessWidget {
   final String title;
@@ -453,12 +454,7 @@ class CardsWidget extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.arrow_forward),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CardDetailsPage(cardId: cardId), // Pass the cardId here
-              ),
-            );
+            routers.go('/datailscard/$cardId');
           },
         ),
       ),

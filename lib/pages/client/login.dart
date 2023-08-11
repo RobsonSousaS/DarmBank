@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class Loginpage extends StatefulWidget {
 class _LoginpageState extends State<Loginpage> {
   TextEditingController _cpfController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final double maxWidth = 700;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +27,7 @@ class _LoginpageState extends State<Loginpage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Loginsignuppage(),
-                  ),
-                );
+                routers.go('/loginorsignup');
               },
             ),
           ),
@@ -65,7 +62,7 @@ class _LoginpageState extends State<Loginpage> {
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: _cpfController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: false,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -76,7 +73,7 @@ class _LoginpageState extends State<Loginpage> {
                   TitleTextFieldWidget(
                     title: 'Senha',
                     controller: _passwordController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: true,
                   ),
                   SizedBox(
@@ -94,12 +91,7 @@ class _LoginpageState extends State<Loginpage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Forgotpasspage(),
-                            ),
-                          );
+                          routers.go('/resetpassword');
                         },
                         child: Text(
                           'clique aqui para recuperá-la',
@@ -152,12 +144,7 @@ class _LoginpageState extends State<Loginpage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CreateAccountPage(),
-                            ),
-                          );
+                          routers.go('/signup');
                         },
                         child: Text(
                           'Se cadastre aqui',
@@ -201,16 +188,10 @@ class _LoginpageState extends State<Loginpage> {
 
       if (hasCards) {
         // O usuário possui cartões, redirecione para a tela CardsPage
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => CardPage()),
-        );
+        routers.go('/listcards');
       } else {
         // O usuário não possui cartões, redirecione para a tela CreatecardPage
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => CreatecardPage()),
-        );
+        routers.go('/createcard');
       }
     } else {
       // O login falhou, trate conforme necessário

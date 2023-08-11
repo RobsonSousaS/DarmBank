@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final _passworddnvController = TextEditingController();
   TextEditingController estadoController = TextEditingController();
   TextEditingController tipoContaController = TextEditingController();
+  final double maxWidth = 700;
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +33,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Loginsignuppage(),
-                  ),
-                );
+                routers.go('/loginorsignup');
               },
             ),
           ),
@@ -65,19 +62,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   TitleTextFieldWidget(
                     title: 'Nome completo',
                     controller: _nomeController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: false,
                   ),
                   TitleTextFieldWidget(
                     title: 'E-mail',
                     controller: _emailController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: false,
                   ),
                   TitleTextFieldWidget(
                     title: 'CPF',
                     controller: _cpfController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: false,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -88,7 +85,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   TitleTextFieldWidget(
                     title: 'Telefone',
                     controller: _cellController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: false,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -116,13 +113,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   TitleTextFieldWidget(
                     title: 'Senha',
                     controller: _passwordController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: true,
                   ),
                   TitleTextFieldWidget(
                     title: 'Confirmar senha',
                     controller: _passworddnvController,
-                    width: 400,
+                    width: maxWidth,
                     obscureText: true,
                   ),
                   SizedBox(
@@ -167,12 +164,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Loginpage(),
-                            ),
-                          );
+                          routers.go("/login");
                         },
                         child: Text(
                           'Faça login aqui',
@@ -235,9 +227,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'tipoConta': tipoConta,
         'estado': estado,
       });
-       Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => CreatecardPage()));
+       routers.go("/createcard");
       // A conta do usuário foi criada com sucesso e os dados foram salvos
     } 
     catch (e) {

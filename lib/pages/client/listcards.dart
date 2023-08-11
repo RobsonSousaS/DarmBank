@@ -1,5 +1,6 @@
 import 'package:bank_darm/Imports/imports.dart';
-import 'package:bank_darm/pages/createnewcard.dart';
+import 'package:bank_darm/pages/client/createnewcard.dart';
+import 'package:bank_darm/routers/routers.dart';
 
 class CardPage extends StatefulWidget {
   @override
@@ -20,12 +21,7 @@ Future<void> _handleAddCardButton(BuildContext context) async {
     );
   } else {
     // If the user has not reached the limit yet, navigate to the CreatenewcardPage
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CreateNewcardPage(),
-      ),
-    );
+    routers.go('/createnewcard');
   }
 }
 
@@ -118,10 +114,7 @@ class _CardPageState extends State<CardPage> {
               onPressed: () {
                 setState(() {
                   _currentIndex = 0;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UserPage()),
-                  );
+                  routers.go('/usercli');
                 });
               },
             ),
@@ -188,12 +181,7 @@ class CardDetailsPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CardPage(),
-              ),
-            );
+            routers.go('/listcards');
           },
         ),
       ),

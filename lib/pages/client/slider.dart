@@ -1,4 +1,6 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
+
 class SliderPage extends StatefulWidget {
   @override
   _SliderPageState createState() => _SliderPageState();
@@ -109,10 +111,7 @@ class _SliderPageState extends State<SliderPage> {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Loginsignuppage()),
-                  );
+                routers.go('/loginorsignup');
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -158,11 +157,7 @@ class _SliderPageState extends State<SliderPage> {
                   );
 
                   if (currentIndex == imageList.length - 3) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Loginsignuppage()),
-                    );
+                    routers.go('/loginorsignup');
                   }
                 });
               },
