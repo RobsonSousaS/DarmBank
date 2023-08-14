@@ -8,6 +8,9 @@ class ListCliPage extends StatefulWidget {
 class _ListCliPageState extends State<ListCliPage> {
   List<DocumentSnapshot> _filteredClients = [];
   bool _isFiltering = false;
+  String _selectedState = ''; // Estado inicial vazio
+  int _selectedCardCount = 1; // Estado inicial para número de cartões
+  bool _alphabeticalOrder = false;
 
   @override
   void initState() {
@@ -18,25 +21,31 @@ class _ListCliPageState extends State<ListCliPage> {
 
   Future<void> _loadClients() async {
     try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('users').get();
+      // Crie a base da query
+      Query query = FirebaseFirestore.instance.collection('users');
 
-      print('Total de documentos encontrados: ${querySnapshot.size}');
+      // Aplicar filtro de tipo de usuário
+      query = query.where('tipo de usuario', isEqualTo: 'Cliente');
 
-      List<DocumentSnapshot> filteredClients = [];
-
-      for (DocumentSnapshot doc in querySnapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
-        print('Data in document: $data');
-
-        if (data.containsKey('tipo de usuario') &&
-            data['tipo de usuario'] == 'Cliente') {
-          filteredClients.add(doc);
-        }
+      // Aplicar filtro por estado
+      if (_selectedState.isNotEmpty) {
+        query = query.where('estado', isEqualTo: _selectedState);
       }
 
+       // Aplicar filtro por número de cartões
+    if (_selectedCardCount > 1) {
+      query = query.where('numero de cartoes', isEqualTo: _selectedCardCount);
+    }
+
+    // Aplicar filtro por ordem alfabética
+    if (_alphabeticalOrder) {
+      query = query.orderBy('nome');
+    }
+      // Executar a query
+      QuerySnapshot querySnapshot = await query.get();
+
       setState(() {
-        _filteredClients = filteredClients;
+        _filteredClients = querySnapshot.docs;
         _isFiltering = false;
       });
 
@@ -46,7 +55,7 @@ class _ListCliPageState extends State<ListCliPage> {
     }
   }
 
-  void _filterClients(String state, int minCards, bool alphabeticalOrder) {
+  void _filterClients(String state, int selectedCardCount, bool alphabeticalOrder) {
     setState(() {
       _isFiltering = true;
     });
@@ -58,13 +67,14 @@ class _ListCliPageState extends State<ListCliPage> {
       query = query.where('state', isEqualTo: state);
     }
 
-    if (minCards > 0) {
-      query = query.where('cardCount', isGreaterThanOrEqualTo: minCards);
+    if (_selectedCardCount > 1) {
+      query = query.where('cardCount', isGreaterThanOrEqualTo: _selectedCardCount);
     }
 
     if (alphabeticalOrder) {
       query = query.orderBy('name');
     }
+    
 
     query.get().then((querySnapshot) {
       setState(() {
@@ -77,6 +87,11 @@ class _ListCliPageState extends State<ListCliPage> {
         _isFiltering = false;
       });
     });
+    _selectedState = state;
+    _selectedCardCount = selectedCardCount;
+    _alphabeticalOrder = alphabeticalOrder;
+
+    _loadClients();
   }
 
   @override
@@ -98,42 +113,57 @@ class _ListCliPageState extends State<ListCliPage> {
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
-  itemCount: _filteredClients.length,
-  itemBuilder: (context, index) {
-    final client = _filteredClients[index];
-    print('Cliente: $client');
-    
-    if (client != null) {
-      final clientData = client.data() as Map<String, dynamic>?;
+              itemCount: _filteredClients.length,
+              itemBuilder: (context, index) {
+                final client = _filteredClients[index];
+                print('Cliente: $client');
 
-      if (clientData != null && clientData.containsKey('name') && clientData.containsKey('state')) {
-        final name = clientData['name'];
-        final state = clientData['state'];
+                if (client != null) {
+                  final clientData = client.data() as Map<String, dynamic>?;
 
-        return ListTile(
-          title: Text(name),
-          subtitle: Text(state),
-          onTap: () {
-            // Navegar para a página de detalhes do cliente quando clicado
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ClientDetailsPage(client: client),
-              ),
-            );
-          },
-        );
-      } else {
-        print('Cliente não tem os campos "name" e "state".');
-        return SizedBox(); // Retornar um widget vazio se os campos não estiverem presentes
-      }
-    } else {
-      print('Cliente é nulo.');
-      return SizedBox(); // Retornar um widget vazio se o cliente for nulo
-    }
-  },
-),
+                  if (clientData != null &&
+                      clientData.containsKey('nome') &&
+                      clientData.containsKey('estado')) {
+                    final name = clientData['nome'];
+                    final state = clientData['estado'];
 
+                    return Container(
+                      height: 90,
+                      padding: EdgeInsets.all(16.0),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        leading: Icon(Icons
+                            .account_circle), // Ícone do usuário à esquerda
+                        title: Text(name),
+                        subtitle: Text(state),
+                        onTap: () {
+                          // Lógica para lidar com o toque no cliente
+                        },
+                      ),
+                    );
+                  } else {
+                    print('Cliente não tem os campos "nome" e "estado".');
+                    return SizedBox(); // Retornar um widget vazio se os campos não estiverem presentes
+                  }
+                } else {
+                  print('Cliente é nulo.');
+                  return SizedBox(); // Retornar um widget vazio se o cliente for nulo
+                }
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Abrir o filtro de pesquisa
@@ -157,32 +187,6 @@ class _ListCliPageState extends State<ListCliPage> {
   }
 }
 
-class ClientDetailsPage extends StatelessWidget {
-  final DocumentSnapshot client;
-
-  ClientDetailsPage({required this.client});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalhes do Cliente'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Nome: ${client['name']}'),
-            Text('Estado: ${client['state']}'),
-            // Adicione mais detalhes do cliente aqui...
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class FilterDialog extends StatefulWidget {
   final Function(String, int, bool) onFilter;
 
@@ -194,8 +198,11 @@ class FilterDialog extends StatefulWidget {
 
 class _FilterDialogState extends State<FilterDialog> {
   String _selectedState = '';
-  int _minCards = 0;
+  int _selectedCardCount = 1; // Nova variável para o número de cartões
   bool _alphabeticalOrder = false;
+
+  // Lista de valores para o número de cartões
+  final List<int> cardCountOptions = List.generate(6, (index) => index + 1);
 
   @override
   Widget build(BuildContext context) {
@@ -212,8 +219,36 @@ class _FilterDialogState extends State<FilterDialog> {
                 _selectedState = newValue!;
               });
             },
-            items: ['SP', 'RJ', 'MG', 'RS'] // Adicione mais estados aqui...
-                .map<DropdownMenuItem<String>>((String value) {
+            items: [
+              '',
+              'AC',
+              'AL',
+              'AP',
+              'AM',
+              'BA',
+              'CE',
+              'DF',
+              'ES',
+              'GO',
+              'MA',
+              'MT',
+              'MS',
+              'MG',
+              'PA',
+              'PB',
+              'PR',
+              'PE',
+              'PI',
+              'RJ',
+              'RN',
+              'RS',
+              'RO',
+              'RR',
+              'SC',
+              'SP',
+              'SE',
+              'TO',
+            ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -221,16 +256,20 @@ class _FilterDialogState extends State<FilterDialog> {
             }).toList(),
           ),
           SizedBox(height: 16),
-          TextField(
-            keyboardType: TextInputType.number,
-            onChanged: (value) {
+          DropdownButton<int>(
+            value: _selectedCardCount,
+            hint: Text('Número de Cartões'),
+            onChanged: (int? newValue) {
               setState(() {
-                _minCards = int.tryParse(value) ?? 0;
+                _selectedCardCount = newValue!;
               });
             },
-            decoration: InputDecoration(
-              labelText: 'Mínimo de Cartões',
-            ),
+            items: cardCountOptions.map<DropdownMenuItem<int>>((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text(value.toString()),
+              );
+            }).toList(),
           ),
           SizedBox(height: 16),
           CheckboxListTile(
@@ -242,6 +281,24 @@ class _FilterDialogState extends State<FilterDialog> {
             },
             title: Text('Ordenar em Ordem Alfabética'),
           ),
+          SizedBox(height: 16),
+          Row(
+            // Adiciona uma opção para remover o filtro
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  _selectedState = ''; // Limpa o estado selecionado
+                  _selectedCardCount = 1; // Reseta o número de cartões
+                  _alphabeticalOrder = false; // Desmarca a ordenação alfabética
+                  widget.onFilter(
+                      _selectedState, _selectedCardCount, _alphabeticalOrder);
+                  Navigator.of(context).pop();
+                },
+                child: Text('Remover Filtro'),
+              ),
+            ],
+          ),
         ],
       ),
       actions: <Widget>[
@@ -251,9 +308,10 @@ class _FilterDialogState extends State<FilterDialog> {
           },
           child: Text('Cancelar'),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () {
-            widget.onFilter(_selectedState, _minCards, _alphabeticalOrder);
+            widget.onFilter(
+                _selectedState, _selectedCardCount, _alphabeticalOrder);
             Navigator.of(context).pop();
           },
           child: Text('Filtrar'),

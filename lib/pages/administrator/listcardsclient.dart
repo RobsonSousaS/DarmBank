@@ -12,7 +12,7 @@ class _CardsCliPageState extends State<CardsCliPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Cartões',
           style: TextStyle(
             fontWeight: FontWeight.bold,
