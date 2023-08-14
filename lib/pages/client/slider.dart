@@ -50,7 +50,7 @@ class _SliderPageState extends State<SliderPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment:
-                        CrossAxisAlignment.center, // Alinhar ao centro
+                        CrossAxisAlignment.center, 
                     children: [
                       Image.asset(
                         imageList[index],
@@ -60,7 +60,7 @@ class _SliderPageState extends State<SliderPage> {
                       SizedBox(height: 16.0),
                       Row(
                         mainAxisAlignment:
-                            MainAxisAlignment.start, // Alinhar ao centro
+                            MainAxisAlignment.start,
                         children: [
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.0),

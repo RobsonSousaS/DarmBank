@@ -19,13 +19,13 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
     String nome = _nomeController.text;
     String cpf = _cpfController.text;
 
-    // Verifique se todos os campos estão preenchidos
+    
     if (email.isEmpty || nome.isEmpty || cpf.isEmpty) {
-      // Exiba uma mensagem de erro ou faça o tratamento necessário para campos não preenchidos
+      
       return;
     }
 
-    // Verifique se o usuário existe
+    
     final signInMethods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
     if (!signInMethods.contains('password')) {
       throw FirebaseAuthException(
@@ -33,14 +33,14 @@ class _ForgotpasspageState extends State<Forgotpasspage> {
           message: 'Usuário não encontrado. Verifique as informações fornecidas.');
     }
 
-    // Envie o e-mail de redefinição de senha para o usuário
+    
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
-    // Exiba uma mensagem de sucesso ou faça o tratamento necessário
+    
     print('E-mail de redefinição de senha enviado com sucesso para $email');
     routers.go('/passwordmessag');
   } catch (e) {
-    // Trate o erro de redefinição de senha conforme necessário
+    
     if (e is FirebaseAuthException) {
       print('Erro ao redefinir senha: ${e.code} - ${e.message}');
     } else {

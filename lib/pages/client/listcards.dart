@@ -10,7 +10,6 @@ Future<void> _handleAddCardButton(BuildContext context) async {
   List<QueryDocumentSnapshot<Map<String, dynamic>>> cardSnapshots =
       await fetchCardData();
   if (cardSnapshots.length >= 6) {
-    // If the user has already reached the maximum limit of six cards, show the message popup
     showDialog(
       context: context,
       builder: (context) => const AlertDialog(
@@ -19,7 +18,6 @@ Future<void> _handleAddCardButton(BuildContext context) async {
       ),
     );
   } else {
-    // If the user has not reached the limit yet, navigate to the CreatenewcardPage
     routers.go('/createnewcard');
   }
 }
@@ -80,12 +78,12 @@ class _CardPageState extends State<CardPage> {
                 String cardType = cardData['cardType']?.toString() ?? '';
                 String cardNumber = cardData['cardNumber']?.toString() ?? '';
                 String cardId = cardSnapshots[index]
-                    .id; // Get the cardId from the QueryDocumentSnapshot
+                    .id;
 
                 return CardsWidget(
                   cardType: cardType,
                   cardNumber: cardNumber,
-                  cardId: cardId, // Pass the cardId here
+                  cardId: cardId,
                 );
               },
             );
@@ -141,29 +139,23 @@ class _CardPageState extends State<CardPage> {
 Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
     fetchCardData() async {
   try {
-    // Obtenha a instância do Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Obtenha o ID do usuário atualmente autenticado
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
-    // Obtenha a referência para a coleção "cards" do usuário
     CollectionReference<Map<String, dynamic>> cardsCollection =
         firestore.collection('users').doc(userId).collection('cards');
 
-    // Faça uma consulta para obter os documentos de cartão
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await cardsCollection.get();
 
-    // Obtenha os documentos de cartão como uma lista de QueryDocumentSnapshot
     List<QueryDocumentSnapshot<Map<String, dynamic>>> cardSnapshots =
         querySnapshot.docs;
 
     return cardSnapshots;
   } catch (e) {
-    // Trate o erro, se necessário
     print('Erro ao buscar os cartões: $e');
-    return []; // Retorne uma lista vazia em caso de erro
+    return []; 
   }
 }
 
@@ -185,7 +177,7 @@ class CardDetailsPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: fetchCardDetails(), // Fetch the card details using the cardId
+        future: fetchCardDetails(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(

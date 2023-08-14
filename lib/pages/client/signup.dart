@@ -191,7 +191,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       
       String password = _passwordController.text;
 
-      // Outros dados do usuário
+   
       String email = _emailController.text;
       String nome = _nomeController.text;
       String cpf = _cpfController.text;
@@ -200,21 +200,20 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       String estado = estadoController.text;
       String tipoConta = tipoContaController.text;
 
-      // Verifique se as senhas coincidem
+      
       if (password != _passworddnvController.text) {
-        // Senhas não coincidem, exiba uma mensagem de erro ou faça o tratamento necessário
+        
         return;
       }
 
-      // Crie a conta do usuário com email e senha
+     
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Agora você pode salvar os outros dados do usuário em um banco de dados ou armazenamento, como o Cloud Firestore
-      // Exemplo de como salvar os dados do usuário no Cloud Firestore
+     
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -229,17 +228,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'tipo de usuario': 'Cliente',
       });
        routers.go("/createcard");
-      // A conta do usuário foi criada com sucesso e os dados foram salvos
+      
     } 
     catch (e) {
       if (e is FirebaseAuthException) {
         if (e.code == 'email-already-in-use') {
-          // Email já está em uso, exiba uma mensagem de erro ou solicite ao usuário que forneça outro email
+         
         } else {
-          // Outro tipo de erro, trate de acordo com suas necessidades
+          
         }
       } else {
-        // Trate outras exceções que não sejam do tipo FirebaseAuthException, se necessário
+        
       }
       print('Erro ao criar conta: $e');
     }

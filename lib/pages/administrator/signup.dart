@@ -2,16 +2,16 @@ import 'package:bank_darm/Imports/imports.dart';
 import 'package:bank_darm/routers/routers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CreateAccountPageadm extends StatefulWidget {
+
+class CreateAccountPageAdm extends StatefulWidget {
   @override
-  _CreateAccountPageadmState createState() => _CreateAccountPageadmState();
+  _CreateAccountPageAdmState createState() => _CreateAccountPageAdmState();
 }
 
-class _CreateAccountPageadmState extends State<CreateAccountPageadm> {
+class _CreateAccountPageAdmState extends State<CreateAccountPageAdm> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _cpfController = TextEditingController();
-  final _cellController = TextEditingController();
   final _endeController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passworddnvController = TextEditingController();
@@ -177,28 +177,24 @@ class _CreateAccountPageadmState extends State<CreateAccountPageadm> {
       
       String password = _passwordController.text;
 
-      // Outros dados do usuário
       String email = _emailController.text;
       String nome = _nomeController.text;
       String cpf = _cpfController.text;
       String endereco = _endeController.text;
       String estado = estadoController.text;
 
-      // Verifique se as senhas coincidem
       if (password != _passworddnvController.text) {
-        // Senhas não coincidem, exiba uma mensagem de erro ou faça o tratamento necessário
         return;
       }
 
-      // Crie a conta do usuário com email e senha
+   
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // Agora você pode salvar os outros dados do usuário em um banco de dados ou armazenamento, como o Cloud Firestore
-      // Exemplo de como salvar os dados do usuário no Cloud Firestore
+ 
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -210,18 +206,14 @@ class _CreateAccountPageadmState extends State<CreateAccountPageadm> {
         'estado': estado,
         'tipo de usuario': 'Administrador',
       });
-       routers.go("/createcard");
-      // A conta do usuário foi criada com sucesso e os dados foram salvos
+       routers.go("/listcli");
     } 
     catch (e) {
       if (e is FirebaseAuthException) {
         if (e.code == 'email-already-in-use') {
-          // Email já está em uso, exiba uma mensagem de erro ou solicite ao usuário que forneça outro email
         } else {
-          // Outro tipo de erro, trate de acordo com suas necessidades
         }
       } else {
-        // Trate outras exceções que não sejam do tipo FirebaseAuthException, se necessário
       }
       print('Erro ao criar conta: $e');
     }

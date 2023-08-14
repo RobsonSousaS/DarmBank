@@ -1,4 +1,5 @@
 import 'package:bank_darm/Imports/imports.dart';
+import 'package:bank_darm/routers/routers.dart';
 
 class ListCliPage extends StatefulWidget {
   @override
@@ -8,40 +9,38 @@ class ListCliPage extends StatefulWidget {
 class _ListCliPageState extends State<ListCliPage> {
   List<DocumentSnapshot> _filteredClients = [];
   bool _isFiltering = false;
-  String _selectedState = ''; // Estado inicial vazio
-  int _selectedCardCount = 1; // Estado inicial para número de cartões
+  String _selectedState = '';
+  int _selectedCardCount = 1;
   bool _alphabeticalOrder = false;
 
   @override
   void initState() {
     super.initState();
-    // Inicialmente, carregue todos os clientes
     _loadClients();
   }
 
   Future<void> _loadClients() async {
     try {
-      // Crie a base da query
+      
       Query query = FirebaseFirestore.instance.collection('users');
 
-      // Aplicar filtro de tipo de usuário
+      
       query = query.where('tipo de usuario', isEqualTo: 'Cliente');
 
-      // Aplicar filtro por estado
+     
       if (_selectedState.isNotEmpty) {
         query = query.where('estado', isEqualTo: _selectedState);
       }
 
-       // Aplicar filtro por número de cartões
+       
     if (_selectedCardCount > 1) {
       query = query.where('numero de cartoes', isEqualTo: _selectedCardCount);
     }
 
-    // Aplicar filtro por ordem alfabética
     if (_alphabeticalOrder) {
       query = query.orderBy('nome');
     }
-      // Executar a query
+      
       QuerySnapshot querySnapshot = await query.get();
 
       setState(() {
@@ -60,7 +59,7 @@ class _ListCliPageState extends State<ListCliPage> {
       _isFiltering = true;
     });
 
-    // Construa a query de filtro baseada nos parâmetros
+    
     Query query = FirebaseFirestore.instance.collection('users');
 
     if (state.isNotEmpty) {
@@ -93,6 +92,7 @@ class _ListCliPageState extends State<ListCliPage> {
 
     _loadClients();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,27 +146,27 @@ class _ListCliPageState extends State<ListCliPage> {
                       ),
                       child: ListTile(
                         leading: Icon(Icons
-                            .account_circle), // Ícone do usuário à esquerda
+                            .account_circle), 
                         title: Text(name),
                         subtitle: Text(state),
                         onTap: () {
-                          // Lógica para lidar com o toque no cliente
+                          
                         },
                       ),
                     );
                   } else {
                     print('Cliente não tem os campos "nome" e "estado".');
-                    return SizedBox(); // Retornar um widget vazio se os campos não estiverem presentes
+                    return SizedBox(); 
                   }
                 } else {
                   print('Cliente é nulo.');
-                  return SizedBox(); // Retornar um widget vazio se o cliente for nulo
+                  return SizedBox(); 
                 }
               },
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Abrir o filtro de pesquisa
+          
           _showFilterDialog();
         },
         child: Icon(Icons.filter_list),
@@ -174,7 +174,7 @@ class _ListCliPageState extends State<ListCliPage> {
     );
   }
 
-  // Diálogo de filtro
+  
   void _showFilterDialog() {
     showDialog(
       context: context,
@@ -198,10 +198,10 @@ class FilterDialog extends StatefulWidget {
 
 class _FilterDialogState extends State<FilterDialog> {
   String _selectedState = '';
-  int _selectedCardCount = 1; // Nova variável para o número de cartões
+  int _selectedCardCount = 1; 
   bool _alphabeticalOrder = false;
 
-  // Lista de valores para o número de cartões
+  
   final List<int> cardCountOptions = List.generate(6, (index) => index + 1);
 
   @override
@@ -283,14 +283,14 @@ class _FilterDialogState extends State<FilterDialog> {
           ),
           SizedBox(height: 16),
           Row(
-            // Adiciona uma opção para remover o filtro
+            
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                 onPressed: () {
-                  _selectedState = ''; // Limpa o estado selecionado
-                  _selectedCardCount = 1; // Reseta o número de cartões
-                  _alphabeticalOrder = false; // Desmarca a ordenação alfabética
+                  _selectedState = ''; 
+                  _selectedCardCount = 1; 
+                  _alphabeticalOrder = false; 
                   widget.onFilter(
                       _selectedState, _selectedCardCount, _alphabeticalOrder);
                   Navigator.of(context).pop();

@@ -3,7 +3,7 @@ import 'package:bank_darm/routers/routers.dart';
 import 'package:intl/intl.dart';
 
 class CardNewDemonstPage extends StatefulWidget {
-  final String newCard; // Renomeamos de volta para newCard
+  final String newCard; 
   final String selectedCardType;
 
   const CardNewDemonstPage(
@@ -31,19 +31,19 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
   }
 
   Future<void> _fetchUserData() async {
-    // Obtenha a instância do Firestore
+    
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Obtenha o ID do usuário atualmente autenticado
+    
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
     try {
-      // Busque os dados do usuário no Firestore
+      
       DocumentSnapshot userSnapshot =
           await firestore.collection('users').doc(userId).get();
 
       if (userSnapshot.exists) {
-        // Se o documento do usuário existe, atualize o estado do campo cardHolderName
+        
         setState(() {
           _cardHolderNameController.text =
               (userSnapshot.data() as Map<String, dynamic>)['nome']
@@ -51,26 +51,26 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
                   'Nome não encontrado';
         });
       } else {
-        // Documento do usuário não encontrado
+        
         setState(() {
           _cardHolderNameController.text = 'Nome não encontrado';
         });
       }
     } catch (e) {
-      // Trate o erro ao buscar os dados do usuário, se necessário
+      
       print('Erro ao buscar os dados do usuário: $e');
     }
   }
 
   void _createUserCard() async {
-    // Obtenha a instância do Firestore
+    
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Obtenha o ID do usuário atualmente autenticado
+    
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
     try {
-      // Crie um novo documento na coleção "cards" dentro do documento do usuário
+      
       DocumentReference<Map<String, dynamic>> newCardRef = await firestore
           .collection('users')
           .doc(userId)
@@ -88,7 +88,7 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
 
       String newCardId = newCardRef.id;
 
-      // Renomeamos a variável local 'newCard' para 'createdCardType' para evitar conflito
+      
       String createdCardType = await _fetchCardType(newCardId);
 
       setState(() {
@@ -248,32 +248,32 @@ class _CardNewDemonstPageState extends State<CardNewDemonstPage> {
 }
 
 Future<String> _fetchCardType(String cardId) async {
-  // Obtenha a instância do Firestore
+  
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  // Obtenha o ID do usuário atualmente autenticado
+  
   String userId = FirebaseAuth.instance.currentUser!.uid;
 
   try {
-    // Obtenha a referência para o documento do cartão específico
+    
     DocumentSnapshot cardSnapshot = await firestore
         .collection('users')
         .doc(userId)
         .collection('cards')
-        .doc(cardId) // Use o cardId aqui para obter o documento específico
+        .doc(cardId) 
         .get();
 
     if (cardSnapshot.exists) {
-      // Obtenha o valor do campo "tipo"
+      
       String newCard = cardSnapshot.get('tipo')?.toString() ?? 'Desconhecido';
       print('Tipo de cartão: $newCard');
       return newCard;
     } else {
-      // Documento de cartão não encontrado
+      
       return 'Desconhecido';
     }
   } catch (e) {
-    // Trate o erro ao buscar os dados do cartão, se necessário
+   
     print('Erro ao buscar os dados do cartão: $e');
     return 'Desconhecido';
   }
@@ -332,7 +332,7 @@ class _CreateNewcardPageState extends State<CreateNewcardPage> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Atualiza o newCard com o tipo de cartão selecionado
+                        
                         setState(() {
                           newCard = selectedCardType;
                         });

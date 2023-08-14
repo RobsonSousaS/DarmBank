@@ -173,43 +173,52 @@ class _LoginpageState extends State<Loginpage> {
   try {
     String email = await getEmailFromCPF(cpf);
 
-    // Autentique o usuário usando o Firebase Authentication
+    
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
 
-    // Verifique se o login foi bem-sucedido
+  
     if (userCredential.user != null) {
-      // O login foi bem-sucedido, verifique se o usuário possui cartões
+      
       String userId = userCredential.user!.uid;
-      bool hasCards = await checkIfUserHasCards(userId);
+      bool isAdmin = await checkIfUserIsAdmin(userId);
 
-      if (hasCards) {
-        // O usuário possui cartões, redirecione para a tela CardsPage
-        routers.go('/listcards');
+      if (isAdmin) {
+       
+        routers.go('/listcli');
       } else {
-        // O usuário não possui cartões, redirecione para a tela CreatecardPage
-        routers.go('/createcard');
+        
+        bool hasCards = await checkIfUserHasCards(userId);
+
+        if (hasCards) {
+          
+          routers.go('/listcards');
+        } else {
+          
+          routers.go('/createcard');
+        }
       }
     } else {
-      // O login falhou, trate conforme necessário
+      
       print('Login falhou');
     }
   } catch (e) {
-    // Trate o erro de login conforme necessário
+    
     print('Erro de login: $e');
-     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Erro de login'),
-            content: Text(
-                'Senha ou CPF estão incorretos. Verifique suas credenciais.'),
-          );
-        },
-     );
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Erro de login'),
+          content: Text(
+            'Senha ou CPF estão incorretos. Verifique suas credenciais.',
+          ),
+        );
+      },
+    );
     if (e is Exception) {
       print(e.toString());
     } else {
@@ -217,7 +226,6 @@ class _LoginpageState extends State<Loginpage> {
     }
   }
 }
-
 
   Future<String> getEmailFromCPF(String cpf) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -230,7 +238,7 @@ class _LoginpageState extends State<Loginpage> {
       if (data != null &&
           data is Map<String, dynamic> &&
           data['email'] != null) {
-        return data['email'] as String; // Conversão explícita para String
+        return data['email'] as String; 
       } else {
         throw Exception('Email not found');
       }
@@ -242,23 +250,43 @@ class _LoginpageState extends State<Loginpage> {
 
 Future<bool> checkIfUserHasCards(String userId) async {
   try {
-    // Obtenha a instância do Firestore
+    
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Obtenha a referência para a coleção "cards" do usuário
-    CollectionReference cardsCollection = firestore
-        .collection('users')
-        .doc(userId)
-        .collection('cards');
+    
+    CollectionReference cardsCollection =
+        firestore.collection('users').doc(userId).collection('cards');
 
-    // Faça uma consulta para obter os documentos de cartão
+    
     QuerySnapshot querySnapshot = await cardsCollection.limit(1).get();
 
-    // Verifique se há documentos de cartão
+    
     return querySnapshot.size > 0;
   } catch (e) {
-    // Trate o erro ao verificar se o usuário possui cartões, se necessário
+    
     print('Erro ao verificar se o usuário possui cartões: $e');
+    return false;
+  }
+}
+
+Future<bool> checkIfUserIsAdmin(String userId) async {
+  try {
+    
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    
+    DocumentSnapshot userDoc =
+        await firestore.collection('users').doc(userId).get();
+
+    
+    if (userDoc.exists && userDoc['tipo de usuario'] == 'Administrador') {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    
+    print('Erro ao verificar o tipo de usuário: $e');
     return false;
   }
 }
