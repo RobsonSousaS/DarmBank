@@ -18,6 +18,5 @@ export 'package:bank_darm/pages/administrator/listclients.dart';
 export 'package:bank_darm/pages/administrator/listcardsclient.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
 
 

@@ -6,7 +6,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp.router(
+  runApp(
+    MaterialApp.router(
     title: 'DarmBank',
     debugShowCheckedModeBanner: false,
     routerDelegate: routers.routerDelegate,

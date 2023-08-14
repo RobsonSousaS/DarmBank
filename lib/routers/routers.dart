@@ -59,6 +59,8 @@ GoRouter routers = GoRouter(initialLocation: '/', routes: <GoRoute>[
   GoRoute(path: '/usercli', builder: (context, state) => UserPage()),
   GoRoute(path: '/createcard', builder: (context, state) => CreatecardPage()),
   GoRoute(path: '/demonstcard', builder: (context, state) => CarddemonstPage()),
+  
+  GoRoute(path: '/listcli', builder: (context, state) => ListCliPage()),
   GoRoute(
       path: '/createnewcard', builder: (context, state) => CreateNewcardPage()),
   GoRoute(

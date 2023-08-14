@@ -2,12 +2,12 @@ import 'package:bank_darm/Imports/imports.dart';
 import 'package:bank_darm/routers/routers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CreateAccountPage extends StatefulWidget {
+class CreateAccountPageadm extends StatefulWidget {
   @override
-  _CreateAccountPageState createState() => _CreateAccountPageState();
+  _CreateAccountPageadmState createState() => _CreateAccountPageadmState();
 }
 
-class _CreateAccountPageState extends State<CreateAccountPage> {
+class _CreateAccountPageadmState extends State<CreateAccountPageadm> {
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _cpfController = TextEditingController();
@@ -82,17 +82,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       CpfInputFormatter(),
                     ],
                   ),
-                  TitleTextFieldWidget(
-                    title: 'Telefone',
-                    controller: _cellController,
-                    width: maxWidth,
-                    obscureText: false,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      TelefoneInputFormatter(),
-                    ],
-                  ),
                   Row(
                     children: [
                       TitleTextFieldWidget(
@@ -106,9 +95,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       ),
                       EstadoDropdownWidget(estadoController: estadoController)
                     ],
-                  ),
-                  TipoContaDropdownWidget(
-                    tipoContaController: tipoContaController,
                   ),
                   TitleTextFieldWidget(
                     title: 'Senha',
@@ -195,10 +181,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       String email = _emailController.text;
       String nome = _nomeController.text;
       String cpf = _cpfController.text;
-      String telefone = _cellController.text;
       String endereco = _endeController.text;
       String estado = estadoController.text;
-      String tipoConta = tipoContaController.text;
 
       // Verifique se as senhas coincidem
       if (password != _passworddnvController.text) {
@@ -222,11 +206,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'nome': nome,
         'email': email,
         'cpf': cpf,
-        'telefone': telefone,
         'endereco': endereco,
-        'tipoConta': tipoConta,
         'estado': estado,
-        'tipo de usuario': 'Cliente',
+        'tipo de usuario': 'Administrador',
       });
        routers.go("/createcard");
       // A conta do usuário foi criada com sucesso e os dados foram salvos

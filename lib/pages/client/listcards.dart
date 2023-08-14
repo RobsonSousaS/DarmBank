@@ -1,5 +1,4 @@
 import 'package:bank_darm/Imports/imports.dart';
-import 'package:bank_darm/pages/client/createnewcard.dart';
 import 'package:bank_darm/routers/routers.dart';
 
 class CardPage extends StatefulWidget {
@@ -211,7 +210,7 @@ class CardDetailsPage extends StatelessWidget {
             String cardType = cardData['cardType']?.toString() ?? '';
             String cvc = cardData['cvc']?.toString() ?? '';
             String cardSelector = cardData['cardSelector']?.toString() ?? '';
-
+            
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -245,7 +244,7 @@ class CardDetailsPage extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      // Implement the delete card functionality here
+                      _handleDeleteCardButton(context, cardId);
                     },
                     child: Center(
                       child: Text(
@@ -278,6 +277,21 @@ class CardDetailsPage extends StatelessWidget {
     );
   }
 
+Future<void> _handleDeleteCardButton(BuildContext context, String cardId) async {
+  try {
+    await deleteCard(cardId);
+    routers.go('/listcards');
+  } catch (e) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Erro ao Deletar Cartão'),
+        content: Text('Ocorreu um erro ao tentar deletar o cartão.'),
+      ),
+    );
+  }
+}
+
   Future<DocumentSnapshot<Map<String, dynamic>>> fetchCardDetails() async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -296,5 +310,24 @@ class CardDetailsPage extends StatelessWidget {
       print('Erro ao buscar os detalhes do cartão: $e');
       throw e;
     }
+  }
+}
+
+
+Future<void> deleteCard(cardId) async {
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    DocumentReference<Map<String, dynamic>> cardRef = firestore
+        .collection('users')
+        .doc(userId)
+        .collection('cards')
+        .doc(cardId);
+
+    await cardRef.delete();
+  } catch (e) {
+    print('Erro ao deletar o cartão: $e');
+    throw e;
   }
 }
